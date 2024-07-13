@@ -3,10 +3,10 @@
 
 .search-loader {
   width: 21px;
-  padding: 2px;
+  padding: 5px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #aee4dc;
+  background: #ff006f;
   --_m: 
     conic-gradient(#0000 10%,#000),
     linear-gradient(#000 0 0) content-box;

@@ -92,19 +92,16 @@ export const Search = component$(() => {
     items: [],
     cache: {},
     setCache: $(function(this){
-      console.log('setting cache')
       this.cache = this.items.reduce((a,b) => {
         a[b.id] = b
         return a
       },{} as { [key: string ]: YoutubeVideo })
     }),
     set: $(function (this, videos) {
-      console.log('init set', videos)
       this.items = videos
       this.setCache()
     }),
     add: $(function (this, video) {
-      console.log('add bookmark', video)
       const i = this.items.findIndex(v => v.id === video.id)
       if(i >= 0) return;
       this.items = [
@@ -115,7 +112,6 @@ export const Search = component$(() => {
       addBookmark(video)
     }),
     remove: $(function (this, video) {
-      console.log('remove bookmark', video)
       const i = this.items.findIndex(v => v.id === video.id)
       if(i<0) return;
       this.items = [
@@ -135,9 +131,12 @@ export const Search = component$(() => {
 
     // data.set(cacheddata)
     loading.value = true
-    search(text).then(v => {
+
+    search(text)
+    .then(v => {
       data.set(v)
       loading.value = false
+      err.value = false
     }).catch(e => {
       err.value = true
       loading.value = false

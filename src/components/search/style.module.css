@@ -20,11 +20,11 @@
     grid-template-columns: 1fr;
 
     overflow: auto;
-    max-height: calc(80vh - 67px);
+    max-height: calc(80vh - 57px);
     position: relative;
 
     @media (min-width: 600px){
-      max-height: calc(100vh - 67px);
+      max-height: calc(100vh - 57px);
     }
 
     @media (min-width: 800px){
@@ -152,7 +152,7 @@
 
       & > div{
 
-        padding: 13px;
+        padding: 8px;
         padding-right: 0px;
 
         input{
@@ -177,7 +177,6 @@
 
     .searchLoader{
       width: 56px;
-      height: 66px;
       display: flex;
       justify-content: center;
       align-items: center;
