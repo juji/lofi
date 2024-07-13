@@ -1,7 +1,6 @@
 import { component$, useContext } from "@builder.io/qwik";
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
-import { URLSearchParams } from "url";
 
 export const YoutubeFrame = component$(() => {
 
