@@ -7,12 +7,12 @@ export const YoutubeFrame = component$(() => {
   const { id } = useContext(VideoContext)
 
   // https://developers.google.com/youtube/player_parameters
-  const encoded = Object.entries({
+  const encoded = new URLSearchParams({
     autoplay: '0',
     controls: '0',
     fs: '0',
     iv_load_policy: '3',
-  }).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+  }).toString()
 
   return id ? <div class={styles.container}>
     <iframe
