@@ -49,5 +49,6 @@
     "@tauri-apps/cli": "^1.6.0",
     "axios": "^1.7.2",
     "icon-gen": "^4.0.0"
-  }
+  },
+  "packageManager": "yarn@4.3.1"
 }
