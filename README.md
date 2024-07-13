@@ -17,10 +17,16 @@ You will need to build this yourself.
 ## On mac:
 ```bash
 npm i
+rustup target add universal-apple-darwin
 npx tauri build --target universal-apple-darwin
 ```
 
-On Other platforms, checkout [Tauri Docs](https://tauri.app/v1/guides/building/)
+On Other platforms, checkout [Tauri Docs](https://tauri.app/v1/guides/building/). But it will probably be:
+
+```
+npm i
+npx tauri build
+```
 
 ## Last Known Config
 ```bash
