@@ -20,6 +20,9 @@
       "~/*": ["./src/*"]
     }
   },
+  "resolve": {
+    "extensions": [".js", ".jsx"]
+  },
   "files": ["./.eslintrc.cjs"],
   "include": ["src", "./*.d.ts", "./*.config.ts"]
 }
