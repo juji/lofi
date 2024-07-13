@@ -175,6 +175,15 @@
 
     }
 
+    .searchLoader{
+      width: 56px;
+      height: 66px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* background-color: aqua; */
+    }
+
 
     button{
       display: flex;
@@ -198,6 +207,7 @@
       &.search{
         & svg{
           position: relative;
+          left: 5px;
         }
       }
 
@@ -217,8 +227,15 @@
   grid-column-start: 1;
   grid-column-end: -1;
 
-  .error{
-    text-align: center;
-    color: #888;
-  }
+}
+
+.error{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.3rem;
+  text-align: center;
+  color: #ffffff;
+  background-color: rgb(255, 0, 85);
 }

@@ -8,6 +8,7 @@ import {
 } from '@builder.io/qwik'
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
+import './search-loader.css'
 import { 
   search, nextPage,
   type YoutubeVideo, 
@@ -91,16 +92,19 @@ export const Search = component$(() => {
     items: [],
     cache: {},
     setCache: $(function(this){
+      console.log('setting cache')
       this.cache = this.items.reduce((a,b) => {
         a[b.id] = b
         return a
       },{} as { [key: string ]: YoutubeVideo })
     }),
     set: $(function (this, videos) {
+      console.log('init set', videos)
       this.items = videos
       this.setCache()
     }),
     add: $(function (this, video) {
+      console.log('add bookmark', video)
       const i = this.items.findIndex(v => v.id === video.id)
       if(i >= 0) return;
       this.items = [
@@ -111,6 +115,7 @@ export const Search = component$(() => {
       addBookmark(video)
     }),
     remove: $(function (this, video) {
+      console.log('remove bookmark', video)
       const i = this.items.findIndex(v => v.id === video.id)
       if(i<0) return;
       this.items = [
@@ -124,15 +129,18 @@ export const Search = component$(() => {
 
   const err = useSignal(false)
   const bookmarkOpen = useSignal(false)
+  const loading = useSignal(false)
 
   const searchYoutube = $(( text: string ) => {
 
     // data.set(cacheddata)
-
+    loading.value = true
     search(text).then(v => {
       data.set(v)
+      loading.value = false
     }).catch(e => {
       err.value = true
+      loading.value = false
       console.error(e)
     })
   })
@@ -204,9 +212,11 @@ export const Search = component$(() => {
             type="text" value="lofi"
             name="search" placeholder="search" />
         </div>
-        <button class={styles.search} type="submit">
+        { loading.value ? <div class={`${styles.searchLoader}`}>
+          <div class="search-loader"></div>
+        </div> : <button class={styles.search} type="submit">
           <SearchIcon />
-        </button>
+        </button>}
       </form>
       <button class={bookmarkOpen.value ? 
           `${styles.bookmark} ${styles.active}`
@@ -235,16 +245,18 @@ export const Search = component$(() => {
           video={v}
           isBookMarked={Boolean(bookmark.cache[v.id])} 
           onAddBookmark={bookmark.cache[v.id] ? 
-            $(() => bookmark.add(v)) :
-            $(() => bookmark.remove(v))}
+            $(() => bookmark.remove(v)) :
+            $(() => bookmark.add(v))}
         />)}
         <div class={styles.loader}>
-        { err.value ? 
-          <p class={styles.error}>Something bad is happening</p> : 
-          <Loader /> }
+          <Loader />
         </div>
       </div> 
     )}
+
+    { err.value ? 
+      <p class={styles.error}>Something bad is happening</p> : 
+    null }
   </div>
 
 })
