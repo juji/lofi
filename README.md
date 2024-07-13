@@ -5,6 +5,11 @@ A Desktop app to search and listen to LoFi.
 Just turn it on, and forget it.
 Also, you can bookmark your favorite LoFi.
 
+<p align="center"><image 
+src="https://raw.githubusercontent.com/juji/lofi/main/utils/screen.png" 
+width="1500px" 
+height="auto" style="max-width:100%" /></p>
+
 ## Build
 
 You will need to build this yourself.
