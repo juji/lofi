@@ -7,7 +7,7 @@ Also, you can bookmark your favorite LoFi.
 
 <p align="center"><image 
 src="https://raw.githubusercontent.com/juji/lofi/main/utils/screen.png" 
-width="1500px" 
+width="1193px" 
 height="auto" style="max-width:100%" /></p>
 
 ## Build
