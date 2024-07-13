@@ -47,6 +47,7 @@
     "@juji/preflight": "^1.0.1",
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.0",
-    "axios": "^1.7.2"
+    "axios": "^1.7.2",
+    "icon-gen": "^4.0.0"
   }
 }

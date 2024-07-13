@@ -1,4 +1,11 @@
-import { component$, $, useContext, useSignal, useVisibleTask$, useStore, QRL } from '@builder.io/qwik'
+import { 
+  component$, $, 
+  useContext, 
+  useSignal, 
+  useVisibleTask$, 
+  useStore, 
+  type QRL 
+} from '@builder.io/qwik'
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
 import { 
@@ -24,8 +31,8 @@ const Thumbnail = component$(({
 }:{ 
   video: YoutubeVideo 
   bookmark?: boolean
-  onAddBookmark?: () => void
-  onRemoveBookmark?: () => void
+  onAddBookmark?: QRL<() => void>
+  onRemoveBookmark?: QRL<() => void>
   isBookMarked?: boolean
 }) => {
 
@@ -37,10 +44,10 @@ const Thumbnail = component$(({
       onClick$={() => change(video.id)}
       class={styles.thumbnailButton}></button>
     { bookmark ? <button
-      onClick$={() => onRemoveBookmark && onRemoveBookmark()}
+      onClick$={onRemoveBookmark}
       class={`${styles.removeBookmark} ${styles.bookmarkButton}`}
     ><CloseIcon /></button> : <button
-      onClick$={() => onAddBookmark && onAddBookmark()}
+      onClick$={onAddBookmark}
       class={isBookMarked ? `${styles.bookmarkButton} ${styles.on}` : styles.bookmarkButton}
     ><BookmarkIcon /></button> }
     
@@ -147,8 +154,8 @@ export const Search = component$(() => {
 
     const value = (
       (e.target as HTMLFormElement)
-      ?.querySelector('input') as HTMLInputElement
-    )?.value
+      .querySelector('input') as HTMLInputElement
+    ).value
     
     if(!value) return;
     searchYoutube(value)
@@ -161,11 +168,11 @@ export const Search = component$(() => {
     bookmark.set(getBookmarks())
     // searchYoutube("lofi")
 
-    let options = {
+    const options = {
       root: document.querySelector('body'),
     };
     
-    let callback = (entries:IntersectionObserverEntry[]) => {
+    const callback = (entries:IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
 
         if(entry.isIntersecting){
@@ -181,8 +188,8 @@ export const Search = component$(() => {
       });
     };
 
-    let observer = new IntersectionObserver(callback, options);
-    let target = document.querySelector(`.${styles.loader}`);
+    const observer = new IntersectionObserver(callback, options);
+    const target = document.querySelector(`.${styles.loader}`);
     target && observer.observe(target);
     
 
@@ -226,10 +233,10 @@ export const Search = component$(() => {
         {data.items.map((v,i) => <Thumbnail 
           key={`${v.id}${i}`} 
           video={v}
-          isBookMarked={!!bookmark.cache[v.id]} 
-          onAddBookmark={!!bookmark.cache[v.id] ? 
-            $(() => bookmark.remove(v)) : 
-            $(() => bookmark.add(v))} 
+          isBookMarked={Boolean(bookmark.cache[v.id])} 
+          onAddBookmark={bookmark.cache[v.id] ? 
+            $(() => bookmark.add(v)) :
+            $(() => bookmark.remove(v))}
         />)}
         <div class={styles.loader}>
         { err.value ? 

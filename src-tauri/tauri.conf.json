@@ -34,8 +34,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.jujiplay.lofi",
+      "longDescription": "A Dektop app to listen to LoFi",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",

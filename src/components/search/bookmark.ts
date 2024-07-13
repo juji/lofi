@@ -1,5 +1,5 @@
 
-import { YoutubeVideo } from "~/lib/search"
+import type { YoutubeVideo } from "~/lib/search"
 
 export function getBookmarks(){
 
