@@ -72,8 +72,8 @@ export const TimerStore:TimerStoreType = {
     }
 
     const endTime = new Date()
-    // endTime.setHours( endTime.getHours() + this.hours )
-    endTime.setSeconds( endTime.getSeconds() + 15 )
+    endTime.setHours( endTime.getHours() + this.hours )
+    // endTime.setSeconds( endTime.getSeconds() + 15 )
     const endTimeMs = endTime.valueOf()
     
     const interval = setInterval(() => {
