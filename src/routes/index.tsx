@@ -1,5 +1,5 @@
 import { 
-  $, component$, useStore, 
+  component$, useStore, 
   useContextProvider, useVisibleTask$,
 } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";

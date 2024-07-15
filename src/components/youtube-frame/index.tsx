@@ -1,4 +1,6 @@
-import { $, component$, noSerialize, useContext, useId, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { 
+  component$, useContext, 
+  useId, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import { VideoContext } from "~/lib/video-store";
 import { AutoplayContext } from "~/lib/autoplay-store";

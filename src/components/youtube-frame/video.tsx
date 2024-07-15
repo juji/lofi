@@ -1,4 +1,4 @@
-import { $, component$, useVisibleTask$ } from "@builder.io/qwik";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import type { DataTransferType } from "./data-transfer-type";
 

@@ -1,4 +1,4 @@
-import { component$, useContext, useSignal, $, useTask$, useId } from "@builder.io/qwik";
+import { component$, useContext, useSignal, $ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import { TimerInput } from "./input";
 import { TimerContext } from "~/lib/timer-store";

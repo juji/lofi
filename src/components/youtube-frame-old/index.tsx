@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
+import { component$, useContext, useTask$ } from "@builder.io/qwik";
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
 import { AutoplayContext } from "~/lib/autoplay-store";
@@ -25,28 +25,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
     if(typeof YT === 'undefined') return;
     
     let player: any = null
-
-    function onFadeOut(){
-
-      if(!player) return console.log('!player');
-      if(!player.getVolume) return console.log('!player.getVolume');
-
-      console.log('player', player)
-      console.log('Volume Down!!')
-
-      let interval = setInterval(() => {
-
-        const vol = player.getVolume()
-
-        if(vol <= 2) {
-          player.stopVideo()
-          clearInterval(interval)
-        } else {
-          player.setVolume(vol - (vol*0.1))
-        }
-
-      },500)
-    }
 
 
     const inter = setInterval(() => {
@@ -78,7 +56,7 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
         }
       }
   
-      function onPlayerReady(event: any){
+      function onPlayerReady(){
         console.log('player ready')
         player.setVolume(100)
         if(autoplay) player.playVideo()
