@@ -1,22 +1,14 @@
-import { component$, useVisibleTask$ } from "@builder.io/qwik";
-import { useLocation } from '@builder.io/qwik-city';
-
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { YoutubeVideo } from "~/components/youtube-frame/video";
 
 
 export default component$(() => {
 
+  const ytid = useSignal('')
   useVisibleTask$(() => {
-
-    
+    ytid.value = window.location.search.replace(/\?id=/,'')
   })
 
-  
-  
-
-  const loc = useLocation()
-  const id = loc.url.searchParams.get('id')
-
-  return id ? <YoutubeVideo id={id} /> : null
+  return ytid.value ? <YoutubeVideo id={ytid.value} /> : null
 
 })
