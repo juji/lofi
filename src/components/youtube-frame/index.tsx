@@ -1,26 +1,39 @@
-import { component$, useContext } from "@builder.io/qwik";
-import { VideoContext } from "~/lib/video-store";
+import { component$, useContext, useId, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
+import { VideoContext } from "~/lib/video-store";
 
 export const YoutubeFrame = component$(() => {
 
   const { id } = useContext(VideoContext)
+  const iframe = useId()
 
-  // https://developers.google.com/youtube/player_parameters
-  const encoded = new URLSearchParams({
-    autoplay: '0',
-    controls: '0',
-    fs: '0',
-    iv_load_policy: '3',
-  }).toString()
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    window.addEventListener(
+      "message",
+      (event) => {
+
+        // const frame = document.getElementById(iframe) as HTMLIFrameElement
+        // if(!frame){
+        //   return;
+        // }
+        if(event.origin !== window.location.origin) return;
+        console.log(event.origin)
+        console.log(event.data)
+    
+        // …
+      },
+      false,
+    );
+  }, { strategy: 'document-idle' })
 
   return id ? <div class={styles.container}>
     <iframe
-    src={`https://www.youtube.com/embed/${id}?${encoded}`} 
-    title="YouTube video player" 
-    frameBorder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-    referrerPolicy="strict-origin-when-cross-origin" allowFullscreen></iframe>
+      id={iframe}
+      src={`/frame/?id=${id}`}
+      width="100%"
+      height="100%"
+    />
   </div> : null
 
 })

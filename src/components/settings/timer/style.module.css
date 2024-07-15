@@ -1,0 +1,89 @@
+
+
+.container{
+
+  margin-top: 1rem;
+
+  h3{
+    margin: 1rem 0;
+    padding: 0;
+    font-size: large;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    span{
+      font-size: small;
+      color: #878787;
+    }
+  }
+
+  p{
+    font-size: small;
+  }
+
+  .hourinput{
+
+    margin: 0.5rem 0;
+    display: flex;
+    outline-offset: 2px;
+    border-radius: 5px;
+
+    &:has(input:focus),
+    &:has(button:hover)
+    {
+      outline: 1px solid #555;
+
+      &.previouslyValued{
+        outline: 1px solid #23bb7e;
+      }
+    }
+
+    &:has(input:invalid){
+      outline: 1px solid red;
+    }
+
+    & > input {
+      border-bottom-left-radius: 5px;
+      border-top-left-radius: 5px;
+      background-color: #444;
+      padding: 5px 13px;
+      outline: none;
+    }
+    
+    & > span{
+      padding: 5px 13px;
+      border: 1px solid #333;
+      border-bottom-right-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+  }
+
+  .timetilloff{
+    margin-top: 8px;
+    display: grid;
+    align-items: center;
+    gap: 5px;
+    grid-template-columns: auto 1fr auto ;
+    opacity: 0.3;
+
+    button{
+      display: none;
+
+      &:active{
+        opacity: 0.61;
+      }
+    }
+
+    &.on{
+      opacity: 0.7;
+      button{
+        display: block;
+        color: rgb(255, 113, 113);
+      }
+    }
+
+  }
+}

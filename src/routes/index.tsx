@@ -1,33 +1,66 @@
 import { 
   $, component$, useStore, 
-  useContextProvider, useVisibleTask$ 
+  useContextProvider, useVisibleTask$,
 } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import { YoutubeFrame } from "~/components/youtube-frame";
+import { LeftSide } from "~/components/left-side";
 import { Search } from "~/components/search";
-import { VideoContext, VideoStoreType } from "~/lib/video-store";
+import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
+import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
+import { PlayerContext, PlayerStoreType, PlayerStore } from "~/lib/player-store";
+// import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 
 export default component$(() => {
 
-  const videoStore = useStore<VideoStoreType>({
-    id: '',
-    change: $(function(this: VideoStoreType, s: string){
-      this.id = s
-      localStorage.setItem('video', s)
-    })
-  })
+  //
+  const videoStore = useStore<VideoStoreType>(VideoStore)
+  useContextProvider(VideoContext, videoStore)
 
+  // useVisibleTask$(async () => {
+  //   await appWindow.setMinSize(new LogicalSize(700, 510));
+  // })
+
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+    
+    // load lofi the first time
+    // or something else from ls
     const s = localStorage.getItem('video')
     if(s) videoStore.change(s)
     else videoStore.change('jfKfPfyJRdk')
+
   },{ strategy: 'document-ready' })
 
-  useContextProvider(VideoContext, videoStore)
+  //
+  const autoplayStore = useStore<AutoplayStoreType>(AutoPlayStore)
+  useContextProvider(AutoplayContext, autoplayStore)
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+
+    // setting outplay to be on
+    // for the first time
+
+    // add a timeout to prevent video 
+    // from from playing for the first time
+    // the app opens
+    setTimeout(() => {
+
+      const a = localStorage.getItem('autoplay')
+      if(a && a === '0') autoplayStore.off()
+      else autoplayStore.on()
+
+    },1000)
+
+  },{ strategy: 'document-ready' })
+
+  //
+  const playerStore = useStore<PlayerStoreType>(PlayerStore)
+  useContextProvider(PlayerContext, playerStore)
 
   return (
     <div class="app">
-      <YoutubeFrame />
+      <LeftSide />
       <Search />
     </div>
   );
@@ -38,7 +71,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: "description",
-      content: "Just Minimal LoFi Browser",
+      content: "Just A Minimal LoFi Browser",
     },
   ],
 };

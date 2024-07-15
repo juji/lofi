@@ -1,0 +1,64 @@
+
+
+.container{
+
+  width: fit-content;
+  
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+
+  border: 1px solid #333;
+  border-radius: 5px;
+
+  & > button{
+    padding: 0.5rem;
+
+    &:first-child{
+      border-right: 1px solid #333;
+    }
+    &:last-child{
+      border-left: 1px solid #333;
+    }
+
+    &:hover{
+      background-color: #222;
+    }
+
+    &:active{
+      background-color: #111;
+    }
+  }
+
+  & > div{
+    display: grid;
+    grid-template-columns: 7rem 5rem;
+
+    & > span{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid #333;
+    }
+
+    & > input {
+      background-color: transparent;
+      text-align: center;
+      &:focus{
+        outline: none;
+      }
+    }
+
+  }
+
+}

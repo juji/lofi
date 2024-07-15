@@ -1,0 +1,22 @@
+
+
+.container{
+
+  padding: 2rem;
+  background-color: #111;
+  border-top: 1px solid #333;
+
+  h2{
+    margin-bottom: 1rem;
+    padding: 0;
+    font-size: larger;
+  }
+
+  hr{
+    height: 0px;
+    border: 0px;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #333;
+  }
+
+}

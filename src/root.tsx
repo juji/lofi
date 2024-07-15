@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useVisibleTask$ } from "@builder.io/qwik";
 import {
   QwikCityProvider,
   RouterOutlet,
@@ -9,6 +9,13 @@ import { isDev } from "@builder.io/qwik/build";
 
 import '@juji/preflight/min.css'
 import "./global.css";
+
+
+
+declare global {
+  const YT: any
+  const YTConfig: any
+}
 
 export default component$(() => {
   /**
@@ -22,6 +29,18 @@ export default component$(() => {
     <QwikCityProvider>
       <head>
         <meta charset="utf-8" />
+        {/* <script
+          src="https://www.youtube.com/iframe_api" /> */}
+        <script dangerouslySetInnerHTML={`
+          // enabling iframe
+          window.__TAURI_IPC__ = (args) => {
+            //The parent window callback points to the child window
+            window.parent[\`_\${args.callback}\`] = window[\`_\${args.callback}\`];
+          
+            // Call the function of the parent window 
+            window.parent.__TAURI_IPC__(args);
+          };
+        `} />
         {!isDev && (
           <link
             rel="manifest"
