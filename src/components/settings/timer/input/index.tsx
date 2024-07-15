@@ -23,6 +23,7 @@ export const TimerInput = component$<TimerInputProps>(({
         value={value} 
         onKeyUp$={$((e) => {
           const t = e.target as HTMLInputElement
+          console.log('t.valueAsNumber', t.valueAsNumber)
           onChange(t.valueAsNumber||0)
         })}
         onBlur$={$((e) => {

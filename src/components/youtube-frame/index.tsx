@@ -29,6 +29,8 @@ export const YoutubeFrame = component$(() => {
         
         if(event.origin !== window.location.origin) return;
 
+        console.log('event.data', event.data)
+
         const frame = document.getElementById(iframe) as HTMLIFrameElement
         if(event.data === 'ready'){
           
@@ -45,15 +47,20 @@ export const YoutubeFrame = component$(() => {
         }
         
         if(event.data.match('playing:')){
+          console.log('pause')
+          paused.value = false
           setVideoRunning(true)
         }
 
         if(event.data === 'ended'){
+          console.log('ended')
           setVideoRunning(false)
         }
 
-        if(event.data === 'pause'){
+        if(event.data === 'paused'){
+          console.log('paused')
           setVideoRunning(false)
+          paused.value = true
         }
     
       },

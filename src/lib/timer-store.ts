@@ -4,19 +4,21 @@ import {
   NoSerialize 
 } from "@builder.io/qwik";
 import { 
-  formatDistanceToNowStrict,
+  millisecondsToHours,
+  millisecondsToMinutes,
+  millisecondsToSeconds,
 } from "date-fns";
 
 export type TimerStoreType = {
 
-  hours: number | null
+  hours: number
   setHours: QRL<(this:TimerStoreType, hours: number) => void>
 
   videoRunning: boolean
   setVideoRunning: QRL<(this:TimerStoreType, val: boolean) => void>
 
   _interval: NoSerialize<{ i: ReturnType<typeof setInterval> }> | null
-  _start: QRL<(this:TimerStoreType) => void>
+  _start: QRL<(this:TimerStoreType, hours?:number) => void>
   _stop: QRL<(this:TimerStoreType) => void>
   _end: QRL<(this:TimerStoreType) => void>
    
@@ -33,15 +35,17 @@ export const TimerContext = createContextId<TimerStoreType>('TimerContext');
 
 export const TimerStore:TimerStoreType = {
 
-  hours: null,
+  hours: 0,
 
-  setHours: $(function(this: TimerStoreType, hours: number){
-    
-    this._stop()
+  setHours: $(async function(this: TimerStoreType, hours: number){
+
+    await this._stop()
     this.hours = hours
+    console.log('hours', hours)
+    console.log('this.hours', this.hours)
 
     if(this.videoRunning){
-      this._start()
+      this._start(hours)
     }
 
   }),
@@ -57,27 +61,38 @@ export const TimerStore:TimerStoreType = {
   }),
 
   _interval: null,
-  _start: $(function(this: TimerStoreType){
+  _start: $(function(this: TimerStoreType, hours?: number){
 
-    if(!this.hours){
+    if(!this.hours && !hours){
       console.error("can't start without hours set")
       return;
     }
 
-    const startTime = new Date()
+    if(hours) this.hours = hours
+
+    if(!this.hours){
+      console.error('hours not set')
+      return;
+    }
+
     const endTime = new Date()
-    endTime.setHours(endTime.getHours() + this.hours)
-    const startTimeMs = startTime.valueOf()
+    endTime.setHours( endTime.getHours() + this.hours )
+    const endTimeMs = endTime.valueOf()
     
     const interval = setInterval(() => {
     
-      console.log('interval running')
       const now = new Date().valueOf()
 
-      if(now >= startTimeMs){
+      if(now >= endTimeMs){
         this._end()
       }else{
-        this.remainingTime = formatDistanceToNowStrict( endTime )
+        const gap = endTimeMs - now
+        const hours = millisecondsToHours( gap )
+        const hoursMs = hours * 60 * 60 * 1000
+        const minutes = millisecondsToMinutes( gap - hoursMs )
+        const minutesMs = minutes * 60 * 1000
+        const seconds = millisecondsToSeconds( gap - hoursMs - minutesMs )
+        this.remainingTime = `${hours}:${minutes}:${seconds}`
       }
       
     },500)
@@ -92,6 +107,9 @@ export const TimerStore:TimerStoreType = {
       clearInterval(this._interval.i)
       this._interval = null
     }
+
+    this.remainingTime = '~'
+    this.hours = 0
     
   }),
 
