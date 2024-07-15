@@ -139,7 +139,7 @@ export const Search = component$(() => {
 
     search(text)
       .then(v => {
-        console.log('data', v)
+
         const cdata = {
           ...v,
           items: getVideos(v.items)
@@ -158,7 +158,6 @@ export const Search = component$(() => {
   const getNextPage = $(( n: unknown ) => {
     nextPage(n)
       .then(v => {
-        console.log('nextpage data', v)
         data.set({
           items: [ ...data.items, ...getVideos(v.items) ],
           nextPage: v.nextPage

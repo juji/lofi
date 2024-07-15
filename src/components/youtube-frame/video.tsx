@@ -27,7 +27,7 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
     let upVolumeInterval: ReturnType<typeof setInterval>|null = null
 
     videoElement.addEventListener('loadstart', function () {
-      window.top?.postMessage('ready', window.location.origin)
+      window.top?.postMessage({ event: 'ready' }, window.location.origin)
     })
 
     videoElement.addEventListener('playing', function () {
@@ -38,7 +38,6 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
       upVolumeInterval = setInterval(() => {
   
         if(volume >= 100) {
-          console.log('done setting volume')
           volume = 100
           videoElement.setVolume(volume * masterVolume / 100)
           upVolumeInterval && clearInterval(upVolumeInterval)
@@ -47,22 +46,21 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
         } else {
 
           volume = Math.min(100, volume + (volume * 0.5))
-          console.log('setting volume', volume)
           videoElement.setVolume(volume)
 
         }
 
       },500)
 
-      window.top?.postMessage({ type: 'playing' }, window.location.origin)
+      window.top?.postMessage({ event: 'playing' }, window.location.origin)
     });
     
     videoElement.addEventListener('pause', function () {
-      window.top?.postMessage({ type: 'paused' }, window.location.origin)
+      window.top?.postMessage({ event: 'paused' }, window.location.origin)
     });
     
     videoElement.addEventListener('ended', function () {
-      window.top?.postMessage({ type: 'ended' }, window.location.origin)
+      window.top?.postMessage({ event: 'ended' }, window.location.origin)
     });
 
     window.addEventListener(
@@ -70,14 +68,12 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
       (event) => {
 
         if(event.origin !== window.location.origin) return;
-        console.log(event.data)
 
         const { data:transfer } : {
           data: DataTransferType
         } = event
 
         if(transfer.event === 'mastervol'){
-          console.log('frame: on vol change')
           if(typeof transfer.data === 'number') masterVolume = transfer.data
           videoElement.setVolume(volume * masterVolume / 100)
         }
@@ -99,14 +95,16 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
           downVolumeInterval = setInterval(() => {
     
             if(volume <= 2) {
-              console.log('pause video')
+
               videoElement.pause()
               downVolumeInterval && clearInterval(downVolumeInterval)
               downVolumeInterval = null
+
             } else {
+
               volume = volume - (volume*0.1)
-              console.log('setting volume', volume)
               videoElement.setVolume(volume)
+
             }
     
           },500)

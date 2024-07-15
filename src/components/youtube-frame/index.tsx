@@ -33,7 +33,6 @@ export const YoutubeFrame = component$(() => {
   useVisibleTask$(() => {
 
     onVolumeChange((vol: number) => {
-      console.log('on vol change')
       const frame = document.getElementById(iframe) as HTMLIFrameElement
       frame.contentWindow?.postMessage({
         event: 'mastervol',
@@ -70,18 +69,15 @@ export const YoutubeFrame = component$(() => {
         }
         
         if(data.event === 'playing'){
-          console.log('pause')
           paused.value = false
           setVideoRunning(true)
         }
 
         if(data.event ===  'ended'){
-          console.log('ended')
           setVideoRunning(false)
         }
 
         if(data.event ===  'paused'){
-          console.log('paused')
           setVideoRunning(false)
           paused.value = true
         }

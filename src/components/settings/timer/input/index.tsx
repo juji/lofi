@@ -26,10 +26,6 @@ export const TimerInput = component$<TimerInputProps>(({
           console.log('t.valueAsNumber', t.valueAsNumber)
           onChange(t.valueAsNumber||0)
         })}
-        onBlur$={$((e) => {
-          const t = e.target as HTMLInputElement
-          onChange(t.valueAsNumber||0)
-        })}
       />
       <span>{value <= 1 ? 'hour' : `hours`}</span>
     </div>

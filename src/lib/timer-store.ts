@@ -18,7 +18,7 @@ export type TimerStoreType = {
   setVideoRunning: QRL<(this:TimerStoreType, val: boolean) => void>
 
   _interval: NoSerialize<{ i: ReturnType<typeof setInterval> }> | null
-  _start: QRL<(this:TimerStoreType, hours?:number) => void>
+  _start: QRL<(this:TimerStoreType) => void>
   _stop: QRL<(this:TimerStoreType) => void>
   _end: QRL<(this:TimerStoreType) => void>
    
@@ -41,11 +41,9 @@ export const TimerStore:TimerStoreType = {
 
     await this._stop()
     this.hours = hours
-    console.log('hours', hours)
-    console.log('this.hours', this.hours)
 
     if(this.videoRunning){
-      this._start(hours)
+      this._start()
     }
 
   }),
@@ -61,14 +59,12 @@ export const TimerStore:TimerStoreType = {
   }),
 
   _interval: null,
-  _start: $(function(this: TimerStoreType, hours?: number){
+  _start: $(function(this: TimerStoreType){
 
-    if(!this.hours && !hours){
+    if(!this.hours){
       console.error("can't start without hours set")
       return;
     }
-
-    if(hours) this.hours = hours
 
     if(!this.hours){
       console.error('hours not set')
@@ -76,7 +72,8 @@ export const TimerStore:TimerStoreType = {
     }
 
     const endTime = new Date()
-    endTime.setHours( endTime.getHours() + this.hours )
+    // endTime.setHours( endTime.getHours() + this.hours )
+    endTime.setSeconds( endTime.getSeconds() + 15 )
     const endTimeMs = endTime.valueOf()
     
     const interval = setInterval(() => {
