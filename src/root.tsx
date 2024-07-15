@@ -29,8 +29,8 @@ export default component$(() => {
     <QwikCityProvider>
       <head>
         <meta charset="utf-8" />
-        {/* <script
-          src="https://www.youtube.com/iframe_api" /> */}
+        <script
+          src="https://www.youtube.com/iframe_api" />
         <script dangerouslySetInnerHTML={`
           // enabling iframe
           window.__TAURI_IPC__ = (args) => {

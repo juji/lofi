@@ -1,22 +1,16 @@
 import { 
   createContextId, type QRL, $, 
-  noSerialize,
   NoSerialize 
 } from "@builder.io/qwik";
-
-export type PlayerEvent = 'end' | 'play' | 'paused' | 'fadeout'
-export type PlayerEventListener = () => void
 
 export type PlayerStoreType = {
 
   videoId: string
   paused: boolean
-  FadeoutEvent: string
+  
   playing: QRL<(this:PlayerStoreType, videoId: string) => void>
   stopping: QRL<(this:PlayerStoreType) => void>
   pausing: QRL<(this:PlayerStoreType) => void>
-
-  fadeOut: QRL<(this:PlayerStoreType) => void>
 
 }
 
@@ -37,11 +31,6 @@ export const PlayerStore:PlayerStoreType = {
   pausing: $(function(this:PlayerStoreType){
     this.videoId = ''
     this.paused = true
-  }),
-
-  FadeoutEvent: 'lofi:fadeout',
-  fadeOut: $(function(this:PlayerStoreType){
-    document.dispatchEvent(new CustomEvent(this.FadeoutEvent))
   }),
 
 }

@@ -142,7 +142,7 @@
   .topbar{
 
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: auto 1fr auto;
     background-color: #222;
     border-bottom: 1px solid #333;
 
@@ -214,6 +214,13 @@
         & svg{
           position: relative;
           left: -8px;
+        }
+      }
+
+      &.refreshButton{
+        & svg{
+          width: 28px;
+          height: 28px;
         }
       }
     }

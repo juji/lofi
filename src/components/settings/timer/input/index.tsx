@@ -7,13 +7,11 @@ const MinusIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="no
 export type TimerInputProps = {
   onChange: QRL<(n: number) => void>
   value: number
-  inputId: string
 }
 
 export const TimerInput = component$<TimerInputProps>(({ 
   onChange, 
   value,
-  inputId 
 }) => {
 
   return <div class={styles.container}>
@@ -22,7 +20,6 @@ export const TimerInput = component$<TimerInputProps>(({
     </button>
     <div>
       <input type="number" min="0" 
-        id={inputId}
         value={value} 
         onKeyUp$={$((e) => {
           const t = e.target as HTMLInputElement
@@ -30,7 +27,6 @@ export const TimerInput = component$<TimerInputProps>(({
         })}
         onBlur$={$((e) => {
           const t = e.target as HTMLInputElement
-          console.log('onblur', t.valueAsNumber)
           onChange(t.valueAsNumber||0)
         })}
       />

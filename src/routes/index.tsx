@@ -5,10 +5,13 @@ import {
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { LeftSide } from "~/components/left-side";
 import { Search } from "~/components/search";
+
 import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
 import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
 import { PlayerContext, PlayerStoreType, PlayerStore } from "~/lib/player-store";
-// import { appWindow, LogicalSize } from '@tauri-apps/api/window';
+import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
+
+import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 
 export default component$(() => {
 
@@ -16,9 +19,9 @@ export default component$(() => {
   const videoStore = useStore<VideoStoreType>(VideoStore)
   useContextProvider(VideoContext, videoStore)
 
-  // useVisibleTask$(async () => {
-  //   await appWindow.setMinSize(new LogicalSize(700, 510));
-  // })
+  useVisibleTask$(async () => {
+    await appWindow.setMinSize(new LogicalSize(700, 600));
+  })
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -38,25 +41,20 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
 
-    // setting outplay to be on
-    // for the first time
-
-    // add a timeout to prevent video 
-    // from from playing for the first time
-    // the app opens
-    setTimeout(() => {
-
-      const a = localStorage.getItem('autoplay')
-      if(a && a === '0') autoplayStore.off()
-      else autoplayStore.on()
-
-    },1000)
+    // setting autoplay
+    const a = localStorage.getItem('autoplay')
+    if(a && a === '0') autoplayStore.off()
+    else autoplayStore.on()
 
   },{ strategy: 'document-ready' })
 
   //
   const playerStore = useStore<PlayerStoreType>(PlayerStore)
   useContextProvider(PlayerContext, playerStore)
+
+  //
+  const timerStore = useStore<TimerStoreType>(TimerStore)
+  useContextProvider(TimerContext, timerStore)
 
   return (
     <div class="app">

@@ -14,7 +14,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
   
   const { 
     playing, stopping, pausing, 
-    FadeoutEvent
   } = useContext(PlayerContext)
   
   const { 
@@ -68,13 +67,15 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
         }
       });
 
+      
       function onPlayerStateChange(event: any){
         if(event.data === YT.PlayerState.PAUSED){
           pausing()
         }
-    
+        
         if(event.data === YT.PlayerState.PLAYING){
           playing(id)
+          console.log('player.getVolume', player.getVolume)
         }
     
         if(event.data === YT.PlayerState.ENDED){
@@ -90,7 +91,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
 
       console.log('video changed, setting up fadeout')
       console.log(player)
-      document.addEventListener(FadeoutEvent, onFadeOut)
 
       clearInterval(inter)
 
@@ -99,7 +99,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
     cleanup(() => {
       console.log('video changed, cleaning up')
       player.destroy()
-      document.removeEventListener(FadeoutEvent, onFadeOut)
     })
 
   })
