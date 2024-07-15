@@ -1,7 +1,6 @@
 import { $, component$, noSerialize, useContext, useId, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import { VideoContext } from "~/lib/video-store";
-import { PlayerContext } from "~/lib/player-store";
 import { AutoplayContext } from "~/lib/autoplay-store";
 import { TimerContext } from "~/lib/timer-store";
 
@@ -11,18 +10,16 @@ export const YoutubeFrame = component$(() => {
   const iframe = useId()
 
   const { 
-    playing, stopping, pausing,
-  } = useContext(PlayerContext)
-
-  const { 
     autoplay, 
   } = useContext(AutoplayContext)
 
   const { 
-    start, onEnd
+    onEnd: onTimerEnd, 
+    setVideoRunning
   } = useContext(TimerContext)
 
-  let firstOpen = useSignal(true)
+  const firstOpen = useSignal(true)
+  const paused = useSignal(false)
   
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -36,11 +33,10 @@ export const YoutubeFrame = component$(() => {
         if(event.data === 'ready'){
           
           if(autoplay && !firstOpen.value) {
-            start()
             frame.contentWindow?.postMessage('play', window.location.origin)
           }
 
-          onEnd(() => {
+          onTimerEnd(() => {
             frame.contentWindow?.postMessage('fadeout', window.location.origin)
           })
 
@@ -49,17 +45,15 @@ export const YoutubeFrame = component$(() => {
         }
         
         if(event.data.match('playing:')){
-          playing(event.data.split(':').pop())
-          console.log('playing', event.data)
-          if(!autoplay) start()
+          setVideoRunning(true)
         }
 
         if(event.data === 'ended'){
-          stopping()
+          setVideoRunning(false)
         }
 
         if(event.data === 'pause'){
-          pausing()
+          setVideoRunning(false)
         }
     
       },
@@ -74,6 +68,7 @@ export const YoutubeFrame = component$(() => {
       width="100%"
       height="100%"
     />
+    { paused.value ? <p class={styles.paused}>Paused</p> : null }
   </div> : null
 
 })

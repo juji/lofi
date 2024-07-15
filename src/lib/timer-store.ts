@@ -10,130 +10,110 @@ import {
 export type TimerStoreType = {
 
   hours: number | null
-
-  running: boolean
-  remainingTime: string
-  ended: boolean
-
-  dateEnd: Date | null
-
-  interval: NoSerialize<{ i: ReturnType<typeof setInterval> }> | null
-  clearInterval: QRL<(this:TimerStoreType) => void>
-  runInterval: QRL<(this:TimerStoreType) => void>
-
   setHours: QRL<(this:TimerStoreType, hours: number) => void>
 
-  start: QRL<(this:TimerStoreType) => void>
-  stop: QRL<(this:TimerStoreType) => void>
+  videoRunning: boolean
+  setVideoRunning: QRL<(this:TimerStoreType, val: boolean) => void>
+
+  _interval: NoSerialize<{ i: ReturnType<typeof setInterval> }> | null
+  _start: QRL<(this:TimerStoreType) => void>
+  _stop: QRL<(this:TimerStoreType) => void>
   _end: QRL<(this:TimerStoreType) => void>
-
-  onEndListener: NoSerialize<() => void> | null
+   
+  _onEndListener: NoSerialize<() => void> | null
   onEnd: QRL<(this:TimerStoreType, fn: () => void) => void>
+  
+  remainingTime: string
 
+  cancel: QRL<(this:TimerStoreType) => void>
+  
 }
 
 export const TimerContext = createContextId<TimerStoreType>('TimerContext');
-
-
-function millisecondsToHours( ms: number ){
-  return Math.ceil(
-    ms / 1000 / 60 / 60
-  )
-}
 
 export const TimerStore:TimerStoreType = {
 
   hours: null,
 
-  running: false,
-  remainingTime: '~',
-  ended: false,
-
-  dateEnd: null,
-
   setHours: $(function(this: TimerStoreType, hours: number){
-    console.log('setting hours', hours)
+    
+    this._stop()
     this.hours = hours
-    if(this.running) {
-      this.clearInterval()
-      this.runInterval()
+
+    if(this.videoRunning){
+      this._start()
     }
+
   }),
 
-  interval: null,
-  clearInterval: $(function(this: TimerStoreType){
-    if(this.interval && this.interval.i) {
-      console.log('clear interval')
-      clearInterval(this.interval.i)
-      this.interval = null
+  videoRunning: false,
+  setVideoRunning: $(function(this:TimerStoreType, val: boolean){
+    this.videoRunning = val
+    
+    if(this.videoRunning && this.hours){
+      this._start()
     }
+    
   }),
-  runInterval: $(function(this: TimerStoreType){
 
-    if(!this.hours) {
-      console.log('Hours not set')
+  _interval: null,
+  _start: $(function(this: TimerStoreType){
+
+    if(!this.hours){
+      console.error("can't start without hours set")
       return;
     }
 
-    const date = new Date()
+    const startTime = new Date()
+    const endTime = new Date()
+    endTime.setHours(endTime.getHours() + this.hours)
+    const startTimeMs = startTime.valueOf()
     
-    // date.setHours( date.getHours() + this.hours )
-    date.setSeconds( date.getSeconds() + 10 )
-
-    this.dateEnd = date
-
-    console.log('run Interval')
-
     const interval = setInterval(() => {
-
+    
       console.log('interval running')
+      const now = new Date().valueOf()
 
-      // not happening
-      if(!this.dateEnd) return this._end()
-
-      if(new Date().valueOf() >= this.dateEnd?.valueOf()){
+      if(now >= startTimeMs){
         this._end()
       }else{
-        this.hours = millisecondsToHours( date.valueOf() - new Date().valueOf() )
-        this.remainingTime = formatDistanceToNowStrict(date)
+        this.remainingTime = formatDistanceToNowStrict( endTime )
       }
-
+      
     },500)
-
-    this.interval = noSerialize({ i: interval })
-
-  }),
-
-  start: $(function(this: TimerStoreType){
-
-    this.ended = false
-    this.running = true
-
-    this.runInterval()
+    
+    this._interval = noSerialize({ i: interval })
 
   }),
 
-  stop: $(function(this: TimerStoreType){
-
-    this.clearInterval()
-
-    this.hours = null
-    this.running = false
-    this.remainingTime = '~'
-
+  _stop: $(function(this: TimerStoreType){
+    
+    if(this._interval?.i){
+      clearInterval(this._interval.i)
+      this._interval = null
+    }
+    
   }),
 
   _end: $(function(this: TimerStoreType){
     
-    this.stop()
-    this.ended = true
-    this.onEndListener && this.onEndListener()
-
+    this._stop()
+    this._onEndListener && this._onEndListener()
+    
   }),
 
-  onEndListener: null,
+  _onEndListener: null,
   onEnd: $(function(this:TimerStoreType, fn: () => void) {
-    this.onEndListener = noSerialize(fn)
-  })
+    this._onEndListener = noSerialize(fn)
+  }),
 
+  remainingTime: '~',
+
+
+  cancel: $(function(this: TimerStoreType){
+    
+    this._stop()
+    
+  }),
+    
 }

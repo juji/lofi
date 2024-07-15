@@ -8,7 +8,6 @@ import { Search } from "~/components/search";
 
 import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
 import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
-import { PlayerContext, PlayerStoreType, PlayerStore } from "~/lib/player-store";
 import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
@@ -47,10 +46,6 @@ export default component$(() => {
     else autoplayStore.on()
 
   },{ strategy: 'document-ready' })
-
-  //
-  const playerStore = useStore<PlayerStoreType>(PlayerStore)
-  useContextProvider(PlayerContext, playerStore)
 
   //
   const timerStore = useStore<TimerStoreType>(TimerStore)

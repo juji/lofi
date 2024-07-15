@@ -9,7 +9,7 @@ export const Timer = component$(() => {
     setHours, 
     hours, 
     remainingTime,
-    stop
+    cancel
   } = useContext(TimerContext)
 
   const previouslyValued = useSignal(false)
@@ -34,7 +34,7 @@ export const Timer = component$(() => {
     <div class={`${styles.timetilloff} ${running ? styles.on : ''}`}>
       <h4>Countdown:</h4>
       <span>{remainingTime}</span>
-      <button onClick$={$(() => stop())}>stop timer</button>
+      <button onClick$={$(() => cancel())}>cancel</button>
     </div>
   </div>
 

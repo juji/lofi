@@ -2,7 +2,6 @@ import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
 import { AutoplayContext } from "~/lib/autoplay-store";
-import { PlayerContext } from "~/lib/player-store";
 
 type YtProps = {
   id: string
@@ -11,10 +10,6 @@ type YtProps = {
 
 
 const FrameComponent = component$<YtProps>(({ id, params }) => {
-  
-  const { 
-    playing, stopping, pausing, 
-  } = useContext(PlayerContext)
   
   const { 
     autoplay, 
@@ -70,16 +65,16 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
       
       function onPlayerStateChange(event: any){
         if(event.data === YT.PlayerState.PAUSED){
-          pausing()
+          // pausing()
         }
         
         if(event.data === YT.PlayerState.PLAYING){
-          playing(id)
+          // playing(id)
           console.log('player.getVolume', player.getVolume)
         }
     
         if(event.data === YT.PlayerState.ENDED){
-          stopping()
+          // stopping()
         }
       }
   
