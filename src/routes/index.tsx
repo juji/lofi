@@ -19,7 +19,7 @@ export default component$(() => {
   useContextProvider(VideoContext, videoStore)
 
   useVisibleTask$(async () => {
-    await appWindow.setMinSize(new LogicalSize(700, 600));
+    await appWindow.setMinSize(new LogicalSize(700, 550));
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
