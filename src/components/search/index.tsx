@@ -16,7 +16,7 @@ import {
 
 import { Loader } from './loader';
 
-import cacheddata from './data.json'
+// import cacheddata from './data.json'
 import { getBookmarks, addBookmark, removeBookmark } from './bookmark';
 
 const BookmarkIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19 20H17.1717L12.7072 15.5354C12.3166 15.1449 11.6835 15.1449 11.2929 15.5354L6.82843 20L5 20V7C5 5.34315 6.34315 4 8 4H16C17.6569 4 19 5.34314 19 7V20ZM17 7C17 6.44772 16.5523 6 16 6H8C7.44772 6 7 6.44772 7 7V17L9.87873 14.1212C11.0503 12.9497 12.9498 12.9497 14.1214 14.1212L17 16.9999V7Z" fill="currentColor" /></svg>
@@ -78,6 +78,10 @@ type YTBookmarkStore = {
   remove: QRL<(this: YTBookmarkStore, video: YoutubeVideo) => void> 
 }
 
+function getVideos( data: YoutubeVideo[] ){
+  return data.filter(v => v.type && v.type === 'video')
+}
+
 export const Search = component$(() => {
 
   const data = useStore<YTVidStore>({
@@ -130,19 +134,24 @@ export const Search = component$(() => {
 
   const searchYoutube = $(( text: string ) => {
 
-    data.set(cacheddata)
-    // loading.value = true
+    // data.set(cacheddata)
+    loading.value = true
 
-    // search(text)
-    //   .then(v => {
-    //     data.set(v)
-    //     loading.value = false
-    //     err.value = false
-    //   }).catch(e => {
-    //     err.value = true
-    //     loading.value = false
-    //     console.error(e)
-    //   })
+    search(text)
+      .then(v => {
+        console.log('data', v)
+        const cdata = {
+          ...v,
+          items: getVideos(v.items)
+        }
+        data.set( cdata )
+        loading.value = false
+        err.value = false
+      }).catch(e => {
+        err.value = true
+        loading.value = false
+        console.error(e)
+      })
 
   })
 
@@ -151,12 +160,13 @@ export const Search = component$(() => {
       .then(v => {
         console.log('nextpage data', v)
         data.set({
-          items: [ ...data.items, ...v.items ],
+          items: [ ...data.items, ...getVideos(v.items) ],
           nextPage: v.nextPage
         })
       })
   })
 
+  const textValue = useSignal('lofi') 
   const onSubmit = $((e:SubmitEvent) => {
     
     if(err.value) err.value = false
@@ -165,10 +175,18 @@ export const Search = component$(() => {
       (e.target as HTMLFormElement)
       .querySelector('input') as HTMLInputElement
     ).value
+
+    // we want to enable reload
+    // like in the browser
+    textValue.value = value
     
     if(!value) return;
     searchYoutube(value)
     
+  })
+
+  const onReload = $(() => {
+    searchYoutube(textValue.value)
   })
   
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -187,7 +205,7 @@ export const Search = component$(() => {
         if(entry.isIntersecting){
           
           if(!data.items.length) {
-            searchYoutube("lofi")
+            searchYoutube(textValue.value)
           }
           else if(data.items.length && data.nextPage){
             getNextPage(data.nextPage)
@@ -208,14 +226,14 @@ export const Search = component$(() => {
     <div class={styles.topbar}>
       <button 
         onClick$={$(() => {
-          window.location.reload()
+          onReload()
         })}
         class={styles.refreshButton}><RefreshIcon /></button>
       <form preventdefault:submit onSubmit$={onSubmit}>
         <div>
           <input 
             tabIndex={0}
-            type="text" value="lofi"
+            type="text" value={textValue.value}
             name="search" placeholder="search" />
         </div>
         { loading.value ? <div class={`${styles.searchLoader}`}>
