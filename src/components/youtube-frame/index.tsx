@@ -3,6 +3,9 @@ import styles from './style.module.css'
 import { VideoContext } from "~/lib/video-store";
 import { AutoplayContext } from "~/lib/autoplay-store";
 import { TimerContext } from "~/lib/timer-store";
+import { VolumeContext } from "~/lib/volume-store";
+
+import { DataTransferType } from "./data-transfer-type";
 
 export const YoutubeFrame = component$(() => {
 
@@ -18,46 +21,66 @@ export const YoutubeFrame = component$(() => {
     setVideoRunning
   } = useContext(TimerContext)
 
+  const {
+    master,
+    onVolumeChange
+  } = useContext(VolumeContext)
+
   const firstOpen = useSignal(true)
   const paused = useSignal(false)
   
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
+
+    onVolumeChange((vol: number) => {
+      console.log('on vol change')
+      const frame = document.getElementById(iframe) as HTMLIFrameElement
+      frame.contentWindow?.postMessage({
+        event: 'mastervol',
+        data: vol
+      } as DataTransferType, window.location.origin)
+    })
+
     window.addEventListener(
       "message",
       (event) => {
         
         if(event.origin !== window.location.origin) return;
 
-        console.log('event.data', event.data)
+        const { data } : { data: DataTransferType } = event
 
         const frame = document.getElementById(iframe) as HTMLIFrameElement
-        if(event.data === 'ready'){
+        if(data.event === 'ready'){
           
           if(autoplay && !firstOpen.value) {
-            frame.contentWindow?.postMessage('play', window.location.origin)
+            frame.contentWindow?.postMessage( { 
+              event: 'play',
+              data: {
+                masterVolume: master
+              } 
+            }, window.location.origin)
           }
 
           onTimerEnd(() => {
-            frame.contentWindow?.postMessage('fadeout', window.location.origin)
+            frame.contentWindow?.postMessage({ event: 'fadeout' }, window.location.origin)
           })
 
           firstOpen.value = false
 
         }
         
-        if(event.data.match('playing:')){
+        if(data.event === 'playing'){
           console.log('pause')
           paused.value = false
           setVideoRunning(true)
         }
 
-        if(event.data === 'ended'){
+        if(data.event ===  'ended'){
           console.log('ended')
           setVideoRunning(false)
         }
 
-        if(event.data === 'paused'){
+        if(data.event ===  'paused'){
           console.log('paused')
           setVideoRunning(false)
           paused.value = true
@@ -66,7 +89,7 @@ export const YoutubeFrame = component$(() => {
       },
       false,
     );
-  }, { strategy: 'document-idle' })
+  }, { strategy: 'document-ready' })
 
   return id ? <div class={styles.container}>
     <iframe

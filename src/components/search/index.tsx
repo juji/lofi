@@ -186,6 +186,8 @@ export const Search = component$(() => {
   })
 
   const onReload = $(() => {
+    const input = document.querySelector('.searchForm input') as HTMLInputElement
+    if(input) input.value = textValue.value
     searchYoutube(textValue.value)
   })
   
@@ -229,7 +231,7 @@ export const Search = component$(() => {
           onReload()
         })}
         class={styles.refreshButton}><RefreshIcon /></button>
-      <form preventdefault:submit onSubmit$={onSubmit}>
+      <form preventdefault:submit onSubmit$={onSubmit} class="searchForm">
         <div>
           <input 
             tabIndex={0}

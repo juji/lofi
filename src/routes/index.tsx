@@ -9,6 +9,7 @@ import { Search } from "~/components/search";
 import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
 import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
 import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
+import { VolumeContext, VolumeStoreType, VolumeStore } from "~/lib/volume-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 
@@ -19,7 +20,7 @@ export default component$(() => {
   useContextProvider(VideoContext, videoStore)
 
   useVisibleTask$(async () => {
-    await appWindow.setMinSize(new LogicalSize(700, 550));
+    await appWindow.setMinSize(new LogicalSize(700, 610));
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -50,6 +51,10 @@ export default component$(() => {
   //
   const timerStore = useStore<TimerStoreType>(TimerStore)
   useContextProvider(TimerContext, timerStore)
+
+  //
+  const volumeStore = useStore<VolumeStoreType>(VolumeStore)
+  useContextProvider(VolumeContext, volumeStore)
 
   return (
     <div class="app">

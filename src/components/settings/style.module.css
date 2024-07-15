@@ -6,6 +6,9 @@
   background-color: #111;
   border-top: 1px solid #333;
 
+  display: grid;
+  grid-template-rows: 1fr auto;
+
   h2{
     margin-bottom: 1rem;
     padding: 0;

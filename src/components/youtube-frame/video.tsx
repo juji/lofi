@@ -1,5 +1,6 @@
 import { $, component$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
+import type { DataTransferType } from "./data-transfer-type";
 
 type Video = {
   play: () => void
@@ -21,6 +22,7 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
     }
 
     let volume = 100
+    let masterVolume = 100
     let downVolumeInterval: ReturnType<typeof setInterval>|null = null
     let upVolumeInterval: ReturnType<typeof setInterval>|null = null
 
@@ -30,6 +32,7 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
 
     videoElement.addEventListener('playing', function () {
       
+      // fadein sound
       downVolumeInterval && clearInterval(downVolumeInterval)
       downVolumeInterval = null
       upVolumeInterval = setInterval(() => {
@@ -37,7 +40,7 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
         if(volume >= 100) {
           console.log('done setting volume')
           volume = 100
-          videoElement.setVolume(volume)
+          videoElement.setVolume(volume * masterVolume / 100)
           upVolumeInterval && clearInterval(upVolumeInterval)
           upVolumeInterval = null
 
@@ -51,15 +54,15 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
 
       },500)
 
-      window.top?.postMessage(`playing:${id}`, window.location.origin)
+      window.top?.postMessage({ type: 'playing' }, window.location.origin)
     });
     
     videoElement.addEventListener('pause', function () {
-      window.top?.postMessage('paused', window.location.origin)
+      window.top?.postMessage({ type: 'paused' }, window.location.origin)
     });
     
     videoElement.addEventListener('ended', function () {
-      window.top?.postMessage('ended', window.location.origin)
+      window.top?.postMessage({ type: 'ended' }, window.location.origin)
     });
 
     window.addEventListener(
@@ -69,12 +72,28 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
         if(event.origin !== window.location.origin) return;
         console.log(event.data)
 
-        if(event.data === 'play'){
-          videoElement.play()
+        const { data:transfer } : {
+          data: DataTransferType
+        } = event
+
+        if(transfer.event === 'mastervol'){
+          console.log('frame: on vol change')
+          if(typeof transfer.data === 'number') masterVolume = transfer.data
+          videoElement.setVolume(volume * masterVolume / 100)
         }
 
-        if(event.data === 'fadeout'){
-          console.log('videoElement', videoElement)
+        if(transfer.event === 'play'){
+
+          if(typeof transfer.data.masterVolume === 'number') 
+            masterVolume = transfer.data.masterVolume
+
+          videoElement.play()
+          videoElement.setVolume(volume * masterVolume / 100)
+        }
+
+        if(transfer.event === 'fadeout'){
+          
+          // fadeout sound
           upVolumeInterval && clearTimeout(upVolumeInterval)
           upVolumeInterval = null
           downVolumeInterval = setInterval(() => {

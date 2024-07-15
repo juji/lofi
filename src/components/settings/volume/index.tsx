@@ -1,12 +1,21 @@
-import { component$ } from "@builder.io/qwik";
+import { $, component$, useContext } from "@builder.io/qwik";
+import styles from './style.module.css'
+import { VolumeContext } from "~/lib/volume-store";
 
+export const Volume = component$(() => {
 
-export const VolumeSlider = component$(({ value }:{ value: number }) => {
+  const { setMaster } = useContext(VolumeContext)
 
-
-
-  return <input 
-
-    type="range" min="0" max="100" value={value} />
+  return <div class={styles.container}>
+    <input 
+    type="range" 
+    min="0" 
+    max="100"
+    onInput$={$((e) => {
+      const val = (e.target as HTMLInputElement)?.value
+      setMaster(Number(val)||0)
+    })}
+    value={100} />
+  </div>
 
 })
