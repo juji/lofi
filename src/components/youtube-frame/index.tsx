@@ -57,8 +57,8 @@ export const YoutubeFrame = component$(() => {
 
         const frame = document.getElementById(iframe) as HTMLIFrameElement
         if(data.event === 'ready'){
-          
-          if(autoplay && !firstOpen.value) {
+
+          if(autoplay && !firstOpen.value && !data.data.wasDone) {
             frame.contentWindow?.postMessage( { 
               event: 'play',
               data: {

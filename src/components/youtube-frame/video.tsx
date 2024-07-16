@@ -19,6 +19,9 @@ export const YoutubeVideo = component$<{
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
 
+    const params = new URLSearchParams(window.location.search.replace(/^\?/,''))
+    const wasDone = params.get("wasDone")
+
     const videoElement = document.querySelector('youtube-video') as Video|null
 
     if(!videoElement) {
@@ -32,7 +35,12 @@ export const YoutubeVideo = component$<{
     let upVolumeInterval: ReturnType<typeof setInterval>|null = null
 
     videoElement.addEventListener('loadstart', function () {
-      window.top?.postMessage({ event: 'ready' }, window.location.origin)
+      window.top?.postMessage({ 
+        event: 'ready',
+        data: {
+          wasDone: wasDone
+        }  
+      }, window.location.origin)
     })
 
     videoElement.addEventListener('playing', function () {
@@ -66,6 +74,12 @@ export const YoutubeVideo = component$<{
     
     videoElement.addEventListener('ended', function () {
       window.top?.postMessage({ event: 'ended' }, window.location.origin)
+      setTimeout(() => {
+        params.set('wasDone', '1')
+        window.location.replace(
+          window.location.pathname + '?' + params.toString()
+        )
+      },500)
     });
 
     window.addEventListener(

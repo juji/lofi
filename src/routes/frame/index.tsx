@@ -6,7 +6,8 @@ export default component$(() => {
   const ytid = useSignal('')
 
   useVisibleTask$(() => {
-    ytid.value = window.location.search.replace(/\?id=/,'')
+    const params = new URLSearchParams(window.location.search.replace(/^\?/,''))
+    ytid.value = params.get('id') || ''
   })
 
   return ytid.value ? <YoutubeVideo id={ytid.value} /> : null
