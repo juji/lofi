@@ -1,12 +1,12 @@
 import { 
   component$, useContext, 
-  useId, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+  useId, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import { VideoContext } from "~/lib/video-store";
 import { AutoplayContext } from "~/lib/autoplay-store";
 import { TimerContext } from "~/lib/timer-store";
 import { VolumeContext } from "~/lib/volume-store";
-
+import { isServer } from "@builder.io/qwik/build";
 import { DataTransferType } from "./data-transfer-type";
 
 export const YoutubeFrame = component$(() => {
@@ -24,23 +24,28 @@ export const YoutubeFrame = component$(() => {
   } = useContext(TimerContext)
 
   const {
-    master,
-    onVolumeChange
+    master
   } = useContext(VolumeContext)
 
   const firstOpen = useSignal(true)
   const paused = useSignal(false)
+
+  useTask$(({ track }) => {
+
+    track(() => master)
+    if(isServer) return;
+
+    const frame = document.getElementById(iframe) as HTMLIFrameElement
+    frame && frame.contentWindow?.postMessage({
+      event: 'mastervol',
+      data: master
+    } as DataTransferType, window.location.origin)
+
+  })
+
   
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-
-    onVolumeChange((vol: number) => {
-      const frame = document.getElementById(iframe) as HTMLIFrameElement
-      frame.contentWindow?.postMessage({
-        event: 'mastervol',
-        data: vol
-      } as DataTransferType, window.location.origin)
-    })
 
     window.addEventListener(
       "message",

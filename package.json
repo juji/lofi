@@ -12,13 +12,14 @@
   "trustedDependencies-annotation": "Needed for bun to allow running install scripts",
   "type": "module",
   "scripts": {
+    "clean": "rimraf ./node_modules/.vite; rimraf ./dist; rimraf ./server; kill-port 5173",
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/static/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
     "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
-    "dev": "kill-port 5173; vite --port 5173 --mode ssr",
+    "dev": "npm run clean; vite --port 5173 --mode ssr",
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "fmt": "prettier --write .",
     "fmt.check": "prettier --check .",
@@ -46,13 +47,14 @@
   "dependencies": {
     "@juji/axios-tauri-api-adapter": "^0.2.3",
     "@juji/preflight": "^1.0.1",
-    "@juji/youtube-video-js": "^4.0.4",
+    "@juji/youtube-video-js": "^4.0.6",
     "@tauri-apps/api": "^1.6.0",
     "@tauri-apps/cli": "^1.6.0",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "icon-gen": "^4.0.0",
     "kill-port": "^2.0.1",
+    "rimraf": "^6.0.1",
     "youtube-video-js": "^4.0.1"
   },
   "packageManager": "yarn@1.22.22"

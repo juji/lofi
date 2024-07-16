@@ -19,6 +19,7 @@ export default component$(() => {
   const videoStore = useStore<VideoStoreType>(VideoStore)
   useContextProvider(VideoContext, videoStore)
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     await appWindow.setMinSize(new LogicalSize(700, 610));
   })

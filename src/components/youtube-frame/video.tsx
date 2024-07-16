@@ -12,6 +12,7 @@ type Video = {
 
 export const YoutubeVideo = component$<{id: string }>(({ id }) => {
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
 
     const videoElement = document.querySelector('youtube-video') as Video|null
