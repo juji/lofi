@@ -90,7 +90,7 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
 
 export const YoutubeFrame = component$(() => {
 
-  const { id } = useContext(VideoContext)
+  const { video } = useContext(VideoContext)
 
   // https://developers.google.com/youtube/player_parameters
   const params = new URLSearchParams({
@@ -101,9 +101,9 @@ export const YoutubeFrame = component$(() => {
     iv_load_policy: '3',
   }).toString()
 
-  return id ? <FrameComponent 
+  return video && video.id ? <FrameComponent 
     params={params}
-    id={id} 
+    id={video.id} 
   /> : null
 
 })
