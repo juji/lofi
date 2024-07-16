@@ -9,7 +9,7 @@ on:
 
 jobs:
   publish-tauri:
-    if: "contains(github.event.commits[0].message, '[use ci]')"
+    if: "contains(github.event.commits[0].message, '[build]')"
     permissions:
       contents: write
     strategy:
