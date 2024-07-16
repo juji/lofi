@@ -5,7 +5,7 @@ import type { YoutubeVideo } from './search'
 export type VideoStoreType = {
   video: YoutubeVideo | null
   change: QRL<(this:VideoStoreType, video:YoutubeVideo) => void>
-  getFromStorage: QRL<(this:VideoStoreType) => YoutubeVideo>
+  getFromStorage: QRL<(this:VideoStoreType) => YoutubeVideo|null>
 }
 
 export const VideoContext = createContextId<VideoStoreType>('VideoContext');
@@ -20,8 +20,11 @@ export const VideoStore: VideoStoreType = {
         if(!v.id || !v.channelTitle) {
           localStorage.removeItem('video') 
         }
+        return v
       }catch(e){}
+      return null
     }
+    return null
   }),
   change: $(function(this: VideoStoreType, video: YoutubeVideo){
     this.video = video
