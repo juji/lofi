@@ -12,6 +12,8 @@ import {
 export type TimerStoreType = {
 
   hours: number
+  started: boolean
+
   setHours: QRL<(this:TimerStoreType, hours: number) => void>
 
   videoRunning: boolean
@@ -36,6 +38,7 @@ export const TimerContext = createContextId<TimerStoreType>('TimerContext');
 export const TimerStore:TimerStoreType = {
 
   hours: 0,
+  started: false,
 
   setHours: $(async function(this: TimerStoreType, hours: number){
 
@@ -52,7 +55,7 @@ export const TimerStore:TimerStoreType = {
   setVideoRunning: $(function(this:TimerStoreType, val: boolean){
     this.videoRunning = val
     
-    if(this.videoRunning && this.hours){
+    if(this.videoRunning && this.hours && !this.started){
       this._start()
     }
     
@@ -107,13 +110,17 @@ export const TimerStore:TimerStoreType = {
 
     this.remainingTime = '~'
     this.hours = 0
+    this.started = false
     
   }),
 
   _end: $(function(this: TimerStoreType){
     
     this._stop()
-    this._onEndListener && this._onEndListener()
+    
+    this.videoRunning && 
+    this._onEndListener && 
+    this._onEndListener()
     
   }),
 
