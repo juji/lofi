@@ -12,10 +12,8 @@ type Video = {
 
 export const YoutubeVideo = component$<{
   id: string, 
-  isLive?: string 
 }>(({ 
-  id, 
-  isLive 
+  id
 }) => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
