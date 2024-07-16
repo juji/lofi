@@ -45,9 +45,3 @@ os: Mac OS 14.5.0 [64-bit]
 ➜  ~ node -v
 v20.15.0
 ```
-
-## Static Site Generator (Node.js)
-
-```shell
-npm run build.server
-```
