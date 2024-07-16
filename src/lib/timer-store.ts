@@ -56,6 +56,7 @@ export const TimerStore:TimerStoreType = {
     this.videoRunning = val
     
     if(this.videoRunning && this.hours && !this.started){
+      console.log('starting timer')
       this._start()
     }
     
@@ -73,6 +74,8 @@ export const TimerStore:TimerStoreType = {
       console.error('hours not set')
       return;
     }
+
+    this.started = true
 
     const endTime = new Date()
     endTime.setHours( endTime.getHours() + this.hours )
