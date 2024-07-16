@@ -25,13 +25,25 @@ export default component$(() => {
   })
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
     
     // load lofi the first time
     // or something else from ls
-    const s = localStorage.getItem('video')
-    if(s) videoStore.change(s)
-    else videoStore.change('jfKfPfyJRdk')
+    const video = await videoStore.getFromStorage()
+    console.log('video', video)
+    if(video) videoStore.change(video)
+    else videoStore.change({
+      "id":"jfKfPfyJRdk","type":"video",
+      "thumbnail":{
+        "thumbnails":[{
+          "url":"https://i.ytimg.com/vi/jfKfPfyJRdk/hq720.jpg",
+          "width":720,"height":404
+        }]
+      },
+      "title":"lofi hip hop radio 📚 - beats to relax/study to",
+      "channelTitle":"Lofi Girl",
+      "isLive":true
+    })
 
   },{ strategy: 'document-ready' })
 

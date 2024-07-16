@@ -69,6 +69,21 @@
         background-size: 100% 100%;
       }
 
+      & > span.isLive{
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        padding: 2px 8px;
+        background-color: rgb(240, 0, 0);
+        color: rgb(228, 228, 228);
+        border-radius: 3px;
+      }
+
+      outline-offset: 5px;
+      &:has(.thumbnailButton:focus){
+        outline: 2px solid rgba(255, 80, 80, 0.5);
+      }
+
       button{
         position: absolute;
 
@@ -84,20 +99,21 @@
           right: 5px;
           padding: 2px;
           border-radius: 3px;
+          color: rgb(228, 228, 228);
 
           & svg{
             width: 34px;
             height: 34px;
           }
 
-          &:hover{
+          &:hover, &:focus{
             background: rgba(255,255,255,0.5);
             color: var(--button-hover);
           }
 
           &.on{
             background: var(--button-hover);
-            &:hover{
+            &:hover, &:focus{
               background: white;
             }
           }

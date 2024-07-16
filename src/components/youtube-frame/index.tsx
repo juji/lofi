@@ -11,7 +11,7 @@ import { DataTransferType } from "./data-transfer-type";
 
 export const YoutubeFrame = component$(() => {
 
-  const { id } = useContext(VideoContext)
+  const { video } = useContext(VideoContext)
   const iframe = useId()
 
   const { 
@@ -94,13 +94,14 @@ export const YoutubeFrame = component$(() => {
     );
   }, { strategy: 'document-ready' })
 
-  return id ? <div class={styles.container}>
+  return video && video.id ? <div class={styles.container}>
     <iframe
       id={iframe}
-      src={`/frame/?id=${id}`}
+      src={`/frame/?id=${video.id}`}
       width="100%"
       height="100%"
     />
+    { video.isLive ? <p class={styles.live}>Live</p> : null }
     { paused.value ? <p class={styles.paused}>Paused</p> : null }
   </div> : null
 

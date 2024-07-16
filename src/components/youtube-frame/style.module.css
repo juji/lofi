@@ -14,6 +14,17 @@
     padding: 8px 13px;
   }
 
+  .live{
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    padding: 2px 8px;
+    background-color: rgb(240, 0, 0);
+    color: rgb(228, 228, 228);
+    border-radius: 3px;
+    z-index: 1999;
+  }
+
   
   iframe{
     position: relative;

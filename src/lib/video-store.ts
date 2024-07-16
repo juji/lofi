@@ -1,16 +1,30 @@
 import { $, createContextId, type QRL } from "@builder.io/qwik";
 
+import type { YoutubeVideo } from './search'
+
 export type VideoStoreType = {
-  id: string
-  change: QRL<(this:VideoStoreType, s:string) => void>
+  video: YoutubeVideo | null
+  change: QRL<(this:VideoStoreType, video:YoutubeVideo) => void>
+  getFromStorage: QRL<(this:VideoStoreType) => YoutubeVideo>
 }
 
 export const VideoContext = createContextId<VideoStoreType>('VideoContext');
 
 export const VideoStore: VideoStoreType = {
-  id: '',
-  change: $(function(this: VideoStoreType, s: string){
-    this.id = s
-    localStorage.setItem('video', s)
+  video: null,
+  getFromStorage: $(function(this: VideoStoreType){
+    const video = localStorage.getItem('video')
+    if(video){
+      try{
+        const v = JSON.parse(video)
+        if(!v.id || !v.channelTitle) {
+          localStorage.removeItem('video') 
+        }
+      }catch(e){}
+    }
+  }),
+  change: $(function(this: VideoStoreType, video: YoutubeVideo){
+    this.video = video
+    localStorage.setItem('video', JSON.stringify(video))
   })
 }

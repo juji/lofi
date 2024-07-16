@@ -43,8 +43,9 @@ const Thumbnail = component$(({
   return <div class={styles.thumbnail} 
     style={{backgroundImage: `url('${video.thumbnail.thumbnails[0].url}')`}}>
     <button 
-      onClick$={() => change(video.id)}
+      onClick$={() => change(video)}
       class={styles.thumbnailButton}></button>
+    { video.isLive ? <span class={styles.isLive}>Live</span> : null}
     { bookmark ? <button
       onClick$={onRemoveBookmark}
       class={`${styles.removeBookmark} ${styles.bookmarkButton}`}

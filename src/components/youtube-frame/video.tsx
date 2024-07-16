@@ -10,7 +10,13 @@ type Video = {
   addEventListener: ( key: string, f: () => void ) => void
 }
 
-export const YoutubeVideo = component$<{id: string }>(({ id }) => {
+export const YoutubeVideo = component$<{
+  id: string, 
+  isLive?: string 
+}>(({ 
+  id, 
+  isLive 
+}) => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -121,8 +127,7 @@ export const YoutubeVideo = component$<{id: string }>(({ id }) => {
   return id ? <div class={styles.container}>
     <script
       type="module"
-      // src="/node_modules/@juji/youtube-video-js/dist/youtube-video.js"
-      src="/youtube-video.js"
+      src="/node_modules/@juji/youtube-video-js/dist/youtube-video.js"
     ></script>
     <youtube-video
       width="100%"
