@@ -1,11 +1,12 @@
 name: 'publish'
 
+# This workflow will trigger on each push to the `main` branch 
+# when the commit message contains the token [build]
+
 on:
   push:
     branches:
       - main
-
-# This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
 jobs:
   publish-tauri:
