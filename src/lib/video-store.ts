@@ -22,7 +22,6 @@ export const VideoStore: VideoStoreType = {
         }
         return v
       }catch(e){}
-      return null
     }
     return null
   }),
