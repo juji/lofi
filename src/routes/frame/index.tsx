@@ -9,8 +9,6 @@ export default component$(() => {
     ytid.value = window.location.search.replace(/\?id=/,'')
   })
 
-  return ytid.value ? 
-    <YoutubeVideo id={ytid.value} /> : 
-    null
+  return ytid.value ? <YoutubeVideo id={ytid.value} /> : null
 
 })

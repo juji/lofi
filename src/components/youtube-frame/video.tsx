@@ -125,7 +125,8 @@ export const YoutubeVideo = component$<{
   return id ? <div class={styles.container}>
     <script
       type="module"
-      src="/node_modules/@juji/youtube-video-js/dist/youtube-video.js"
+      // src="/node_modules/@juji/youtube-video-js/dist/youtube-video.js"
+      src="/youtube-video.js"
     ></script>
     <youtube-video
       width="100%"
