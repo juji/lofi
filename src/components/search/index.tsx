@@ -119,6 +119,7 @@ export const Search = component$(() => {
   })
 
   const getNextPage = $(( n: unknown ) => {
+    console.log('calling nextpage', n)
     nextPage(n)
       .then(v => {
         data.set({
