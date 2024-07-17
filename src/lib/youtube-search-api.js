@@ -3,7 +3,12 @@
 import axios from 'axios'
 import axiosTauriApiAdapter from '@juji/axios-tauri-api-adapter';
 
-const httpClient = axios.create({ adapter: axiosTauriApiAdapter });
+const httpClient = axios.create({ 
+  adapter: axiosTauriApiAdapter,
+  headers: {
+    origin: 'https://jujiplay.com'
+  }
+});
 const youtubeEndpoint = `https://www.youtube.com`;
 
 const GetYoutubeInitData = async (url) => {
