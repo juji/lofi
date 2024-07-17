@@ -206,8 +206,8 @@ export const Search = component$(() => {
         </button>}
       </form>
       <BookmarkButton
-        className={bookmarkOpen.value ? `${styles.bookmark} ${styles.active}` : styles.bookmark}
-        onClick={$(() => bookmarkOpen.value = !bookmarkOpen.value)}
+        classNames={bookmarkOpen.value ? `${styles.bookmark} ${styles.active}` : styles.bookmark}
+        onClick={$(() => {bookmarkOpen.value = !bookmarkOpen.value})}
       />
     </div>
     { bookmarkOpen.value ? (
