@@ -1,0 +1,267 @@
+
+
+.container{
+
+  background-color: #111;
+  border-bottom: 1px solid #333;
+  position: relative;
+
+  .buttons{
+    height: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    
+    button{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      opacity: 0.2;
+
+      &.history{
+        opacity: 1;
+      }
+      
+      &.active{
+        opacity: 1;
+
+        &.history{
+          background-color: #222;
+        }
+      }
+
+      &:hover{
+        background-color: #222;
+      }
+
+      &:active{
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .list{
+    
+    position: absolute;
+    top: 57px;
+    width: 100%;
+    overflow-y: auto;
+    z-index: 5;
+    transition: height 200ms ease-out;
+    transition-delay: 300ms;
+    height: 0;
+    background-color: #222;
+
+    .empty{
+      text-align: center;
+      padding: 1rem;
+      color: #777;
+    }
+
+    & input[type=checkbox]{
+      width: 18px;
+      height: 18px;
+      display: block;
+      background-color: transparent;
+      appearance: none;
+      outline: 1px solid #444;
+      border-radius: 5px;
+      background-color: #2a2a2a;
+      box-shadow: -1px 2px 3px 0px rgba(0,0,0,0.49) inset;
+
+      &:checked{
+        background-color: #aa2929;
+        outline: 1px solid #666;
+      }
+    }
+    
+    & .content{
+      position: relative;
+      opacity: 0;
+      transition-delay: 0ms;
+      transition: opacity 200ms ease-out;
+
+      & input{
+        cursor: pointer;
+      } 
+
+      & > .historyItem{
+
+        display: grid;
+        grid-template-columns: 56px 1fr auto;
+        border-bottom: 1px solid #333;
+
+        &>span:first-child{
+          padding: 21px;
+          border-right: 1px solid #333;
+          display: flex;
+          justify-content: center;
+          align-items: top;
+        }
+
+        &>div{
+          display: grid;
+          grid-template-columns: auto 55px;
+          grid-template-rows: 1fr auto;
+
+          &>button.imageButton{
+            grid-column-start: 1;
+            grid-column-end: 3;
+          }
+
+          &>.date{
+            grid-column-start: 1;
+            grid-column-end: 2;
+            padding: 13px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            font-size: small;
+            position: relative;
+            color: #999;
+
+            &>.deleteConfirm{
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              overflow: hidden;
+              z-index: 2;
+              background-color: rgb(255, 71, 71);
+              color: white;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              width: 0%;
+              padding: 0;
+              transition: all 200ms ease-out;
+              transition-delay: 100ms;
+
+              &:hover{
+                background-color: red;
+              }
+
+              &:active{
+                background-color: rgb(200, 1, 1);
+              }
+
+              &>span{
+                opacity: 0;
+                transition: opacity 200ms ease-out;
+                transition-delay: 0ms;
+              }
+
+              &.open{
+                width: 100%;
+                padding: 0 1rem;
+                transition-delay: 0ms;
+                &>span{
+                  transition-delay: 200ms;
+                  opacity: 1;
+                }
+              }
+            }
+          }
+
+          &>button.deleteButton{
+            grid-column-start: 2;
+            grid-column-end: 3;
+            padding: 13px;
+            color: rgb(107, 107, 107);
+
+            display: grid;
+
+            &:hover{
+              color: rgb(255, 99, 99);
+            }
+
+            &:active{
+              opacity: 0.7;
+            }
+          }
+
+
+        }
+      }
+
+      & > .historyTopBar{
+        position: sticky;
+        top:0;
+        display: grid;
+        background-color: rgba(10, 10, 10, 0.9);
+        grid-template-columns: 56px 1fr;
+        border-bottom: 1px solid #333;
+
+        &>div{
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+
+          button{
+            color: #ff9393;
+            padding: 8px 21px;
+
+            &:hover{
+              color: rgb(255, 68, 68);
+            }
+
+            &:active{
+              opacity: 0.7;
+            }
+          }
+        }
+
+        &>span:first-child{
+          padding: 8px 21px;
+          border-right: 1px solid #333;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        &>span:last-child{
+          padding: 8px 21px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        }
+      }
+
+      .loadMore{
+
+        padding: 8px;
+
+        button {
+          display: block;
+          padding: 8px;
+          text-align: center;
+          width: 100%;
+          border: 1px solid #333;
+          border-radius: 5px;
+
+          &:hover{
+            border: 1px solid #444;
+            background-color: #333;
+          }
+
+          &:active{
+            background-color: #222;
+          }
+        }
+
+      }
+
+    }
+    
+    &.open{
+      transition-delay: 0ms;
+      height: calc(100vh - 57px);
+      & .content{
+        transition-delay: 300ms;
+        opacity: 1;
+      }
+    }
+
+  }
+
+}

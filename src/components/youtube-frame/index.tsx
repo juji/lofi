@@ -143,6 +143,8 @@ export const YoutubeFrame = component$(() => {
       class={`${styles.bookmarkButton} ${cache[video.id] ? styles.on : ''}`}>{
       <BookmarkFilled />
     }</button>
+    <a href={`https://www.youtube.com/watch?v=${video.id}`} 
+      target="_blank" class={styles.youtubeLogo}></a>
     { video.isLive ? <p class={styles.live}>Live</p> : null }
     { paused.value ? <p class={styles.paused}>Paused</p> : null }
   </div> : null

@@ -4,6 +4,6 @@
   grid-area: video;
 
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 57px auto 1fr;
 
 }

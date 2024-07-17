@@ -11,55 +11,24 @@ import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autopla
 import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
 import { VolumeContext, VolumeStoreType, VolumeStore } from "~/lib/volume-store";
 import { BookmarkContext, BookmarkStoreType, BookmarkStore } from "~/lib/bookmark-store";
+import { HistoryContext, HistoryStoreType, HistoryStore } from "~/lib/history-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 
 export default component$(() => {
 
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async () => {
+    await appWindow.setMinSize(new LogicalSize(700, 670));
+  })
+
   //
   const videoStore = useStore<VideoStoreType>(VideoStore)
   useContextProvider(VideoContext, videoStore)
 
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    await appWindow.setMinSize(new LogicalSize(700, 610));
-  })
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
-    
-    // load lofi the first time
-    // or something else from ls
-    const video = await videoStore.getFromStorage()
-    if(video) videoStore.change(video)
-    else videoStore.change({
-      "id":"jfKfPfyJRdk","type":"video",
-      "thumbnail":{
-        "thumbnails":[{
-          "url":"https://i.ytimg.com/vi/jfKfPfyJRdk/hq720.jpg",
-          "width":720,"height":404
-        }]
-      },
-      "title":"lofi hip hop radio 📚 - beats to relax/study to",
-      "channelTitle":"Lofi Girl",
-      "isLive":true
-    })
-
-  },{ strategy: 'document-ready' })
-
   //
   const autoplayStore = useStore<AutoplayStoreType>(AutoPlayStore)
   useContextProvider(AutoplayContext, autoplayStore)
-
-  // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
-
-    // setting autoplay
-    const a = localStorage.getItem('autoplay')
-    if(a && a === '0') autoplayStore.off()
-    else autoplayStore.on()
-
-  },{ strategy: 'document-ready' })
 
   //
   const timerStore = useStore<TimerStoreType>(TimerStore)
@@ -73,10 +42,19 @@ export default component$(() => {
   const bookmarkStore = useStore<BookmarkStoreType>(BookmarkStore)
   useContextProvider(BookmarkContext, bookmarkStore)
 
+  //
+  const historyStore = useStore<HistoryStoreType>(HistoryStore)
+  useContextProvider(HistoryContext, historyStore)
+
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
+
+    historyStore.init( videoStore )
+    videoStore.init()
+    autoplayStore.init()
     bookmarkStore.init()
-  })
+
+  },{ strategy: 'document-ready' })
 
   return (
     <div class="app">

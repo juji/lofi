@@ -36,11 +36,11 @@ export const BookmarkStore: BookmarkStoreType = {
 
   add: $(async function(this: BookmarkStoreType, video: YoutubeVideo){
     const bookmarks = await this.get()
-    bookmarks.push(video)
+    bookmarks.unshift(video)
     localStorage.setItem('bookmark', JSON.stringify(bookmarks))
     this.cache = {
+      [video.id]: video,
       ...this.cache,
-      [video.id]: video
     }
     this.addListener && this.addListener(video)
   }),

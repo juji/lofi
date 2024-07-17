@@ -1,4 +1,4 @@
-import { GetListByKeyword, NextPage } from './youtube-search-api'
+import { GetListByKeyword, NextPage } from './utils/youtube-search-api'
 
 export type YoutubeVideo = {
   channelTitle: string
@@ -20,16 +20,31 @@ export type SearchResult = {
   nextPage: unknown
 }
 
+function limitDataKey( data:YoutubeVideo[] ){
+  return data.map(v => {
+
+    const { channelTitle, id, isLive, thumbnail, title, type } = v
+    return { channelTitle, id, isLive, thumbnail, title, type }
+
+  })
+}
+
 export async function search( text: string ) : Promise<SearchResult>{
   
   const data = await GetListByKeyword(text)
-  return data
+  return {
+    items: limitDataKey(data.items),
+    nextPage: data.nextPage
+  }
 
 }
 
-export async function nextPage( next: unknown ){
+export async function nextPage( next: unknown ): Promise<SearchResult>{
   
   const data = await NextPage(next)
-  return data
+  return {
+    items: limitDataKey(data.items),
+    nextPage: data.nextPage
+  }
   
 }
