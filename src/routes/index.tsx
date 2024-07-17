@@ -10,6 +10,7 @@ import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
 import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
 import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
 import { VolumeContext, VolumeStoreType, VolumeStore } from "~/lib/volume-store";
+import { BookmarkContext, BookmarkStoreType, BookmarkStore } from "~/lib/bookmark-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 
@@ -30,7 +31,6 @@ export default component$(() => {
     // load lofi the first time
     // or something else from ls
     const video = await videoStore.getFromStorage()
-    console.log('video', video)
     if(video) videoStore.change(video)
     else videoStore.change({
       "id":"jfKfPfyJRdk","type":"video",
@@ -68,6 +68,15 @@ export default component$(() => {
   //
   const volumeStore = useStore<VolumeStoreType>(VolumeStore)
   useContextProvider(VolumeContext, volumeStore)
+
+  //
+  const bookmarkStore = useStore<BookmarkStoreType>(BookmarkStore)
+  useContextProvider(BookmarkContext, bookmarkStore)
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(() => {
+    bookmarkStore.init()
+  })
 
   return (
     <div class="app">

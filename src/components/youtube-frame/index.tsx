@@ -8,11 +8,47 @@ import { TimerContext } from "~/lib/timer-store";
 import { VolumeContext } from "~/lib/volume-store";
 import { isServer } from "@builder.io/qwik/build";
 import { DataTransferType } from "./data-transfer-type";
+import { BookmarkContext } from "~/lib/bookmark-store";
+
+const BookmarkFilled = () => <svg xmlns="http://www.w3.org/2000/svg" 
+xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">
+  <defs>
+    <linearGradient id="bookmarkfilled" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,0,0,1)" />
+      <stop offset="9%" stop-color="rgba(255,138,138,1)" />
+      <stop offset="100%" stop-color="rgba(255,0,0,1)" />
+    </linearGradient>
+    <linearGradient id="bookmarkfilledhover" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,0,0,1)" />
+      <stop offset="9%" stop-color="#ffb4b4" />
+      <stop offset="100%" stop-color="rgba(255,0,0,1)" />
+    </linearGradient>
+    <linearGradient id="bookmarkemptyhover" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffe0e0" />
+      <stop offset="9%" stop-color="#ff8787" />
+      <stop offset="100%" stop-color="#ffd4d4" />
+    </linearGradient>
+    <linearGradient id="bookmarkempty" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f0f0f0" />
+      <stop offset="9%" stop-color="#9b9b9b" />
+      <stop offset="100%" stop-color="#f3f3f3" />
+    </linearGradient>
+  </defs>
+  <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3l7 3V5c0-1.1-.9-2-2-2z"></path></svg>
 
 export const YoutubeFrame = component$(() => {
 
-  const { video } = useContext(VideoContext)
   const iframe = useId()
+
+  const { 
+    video 
+  } = useContext(VideoContext)
+  
+  const { 
+    cache,
+    add,
+    remove
+  } = useContext(BookmarkContext)
 
   const { 
     autoplay, 
@@ -41,8 +77,9 @@ export const YoutubeFrame = component$(() => {
       data: master
     } as DataTransferType, window.location.origin)
 
+    
+    
   })
-
   
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -101,6 +138,11 @@ export const YoutubeFrame = component$(() => {
       width="100%"
       height="100%"
     />
+    <button 
+      onClick$={() => cache[video.id] ? remove(video) : add(video)}
+      class={`${styles.bookmarkButton} ${cache[video.id] ? styles.on : ''}`}>{
+      <BookmarkFilled />
+    }</button>
     { video.isLive ? <p class={styles.live}>Live</p> : null }
     { paused.value ? <p class={styles.paused}>Paused</p> : null }
   </div> : null

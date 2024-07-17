@@ -4,6 +4,43 @@
   height: 100%;
   position: relative;
 
+  .bookmarkButton{
+
+    --dimension: 55px;
+
+    position: absolute;
+    bottom: calc( -1 * (var(--dimension) - 8px) );
+    right: 13px;
+    z-index: 2000;
+    cursor: pointer;
+    /* color: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,138,138,1) 35%, rgba(255,0,0,1) 100%); */
+
+
+    & > svg{
+      width: var(--dimension);
+      height: var(--dimension);
+      fill: url(#bookmarkempty);
+    }
+
+    &.on{
+      & > svg{
+        fill: url(#bookmarkfilled);
+      }
+    }
+
+    &:hover{
+      & > svg{
+        fill: url(#bookmarkemptyhover);
+      }
+    }
+
+    &.on:hover{
+      & > svg{
+        fill: url(#bookmarkfilledhover);
+      }
+    }
+  }
+
   .paused{
     position: absolute;
     bottom: 0;
