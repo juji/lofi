@@ -1,0 +1,28 @@
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  50% { transform: rotate(0eg); }
+  75% { transform: rotate(-5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes minimize {
+  0% { transform: scale(1) translateY(0px) }
+  100% { transform: scale(0) translateY(-55px) }
+}
+
+.bookmarkButton{
+
+  transform-origin: center center;
+  &.adding{
+    color: red;
+    animation: shake 0.15s infinite;
+  }
+
+  &.removing{
+    color: red;
+    animation: minimize 0.5s;
+  }
+
+}
