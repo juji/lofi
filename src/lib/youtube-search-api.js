@@ -6,7 +6,7 @@ import axiosTauriApiAdapter from '@juji/axios-tauri-api-adapter';
 const httpClient = axios.create({ 
   adapter: axiosTauriApiAdapter,
   headers: {
-    origin: 'https://youtube.com'
+    origin: 'https://www.youtube.com'
   }
 });
 const youtubeEndpoint = `https://www.youtube.com`;
