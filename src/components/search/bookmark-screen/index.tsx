@@ -71,7 +71,7 @@ export const BookmarkScreen = component$(function(){
             alert(e.toString())
           })
         })}
-      >import</button>
+      ><span>import</span></button>
       <button 
         onClick$={$(() => {
           try{
@@ -83,7 +83,7 @@ export const BookmarkScreen = component$(function(){
             alert((e as Error).toString())
           }
         })}
-      >export</button>
+      ><span>export</span></button>
     </div>
     {newBookmark.value ? <div class={`${styles.newBookmark}`}>
       <p>

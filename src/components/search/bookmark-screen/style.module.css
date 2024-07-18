@@ -5,7 +5,8 @@
   position: relative;
 
   .header{
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgb(223, 19, 19);
+    color: white;
     border-bottom: 1px solid #333;
     position: sticky;
     top:0;
@@ -27,8 +28,20 @@
       justify-content: center;
       cursor: pointer;
       padding: 1rem 0rem;
+
+      span{
+        border-radius: 5px;
+        padding: 0.2rem 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        outline: 1px solid rgba(255,255,255,0.5);
+      }
+
       &:hover{
-        color: rgb(255, 49, 49);
+        span{
+          outline: 1px solid rgba(255,255,255,0.7);
+        }
       }
   
       &:active{
@@ -93,7 +106,6 @@
 
   .result{
     max-height: calc(80vh - 67px - 57px);
-
     @media (min-width: 600px){
       max-height: calc(100vh - 67px - 57px);
     }
