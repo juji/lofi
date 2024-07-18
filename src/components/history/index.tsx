@@ -6,7 +6,7 @@ import { type YoutubeVideoHistory } from "~/lib/history-store/db";
 import { VideoContext } from "~/lib/video-store";
 import { HistoryContext } from "~/lib/history-store";
 
-import { LeftButton, RightButton } from "./history-buttons";
+// import { LeftButton, RightButton } from "./history-buttons";
 
 type HistoryItemProps = {
   closeHistory: QRL<() => void>
@@ -216,13 +216,13 @@ export const History = component$(() => {
 
   return <div class={styles.container}>
     <div class={styles.buttons}>
-      <LeftButton />
+      {/* <LeftButton /> */}
       <button 
         class={`${styles.history} ${isOpen.value ? styles.active : ''}`} 
         onClick$={$(() => isOpen.value = !isOpen.value)}>
         History
       </button>
-      <RightButton />
+      {/* <RightButton /> */}
     </div>
     <div 
       id="historySelectorList"
