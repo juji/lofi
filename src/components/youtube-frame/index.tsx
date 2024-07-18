@@ -7,7 +7,7 @@ import { AutoplayContext } from "~/lib/autoplay-store";
 import { TimerContext } from "~/lib/timer-store";
 import { VolumeContext } from "~/lib/volume-store";
 import { isServer } from "@builder.io/qwik/build";
-import { DataTransferType } from "./data-transfer-type";
+import { type DataTransferType } from "./data-transfer-type";
 import { BookmarkContext } from "~/lib/bookmark-store";
 
 const BookmarkFilled = () => <svg xmlns="http://www.w3.org/2000/svg" 

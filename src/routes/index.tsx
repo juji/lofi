@@ -6,12 +6,12 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import { LeftSide } from "~/components/left-side";
 import { Search } from "~/components/search";
 
-import { VideoContext, VideoStoreType, VideoStore } from "~/lib/video-store";
-import { AutoplayContext, AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
-import { TimerContext, TimerStoreType, TimerStore } from "~/lib/timer-store";
-import { VolumeContext, VolumeStoreType, VolumeStore } from "~/lib/volume-store";
-import { BookmarkContext, BookmarkStoreType, BookmarkStore } from "~/lib/bookmark-store";
-import { HistoryContext, HistoryStoreType, HistoryStore } from "~/lib/history-store";
+import { VideoContext, type VideoStoreType, VideoStore } from "~/lib/video-store";
+import { AutoplayContext, type AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
+import { TimerContext, type TimerStoreType, TimerStore } from "~/lib/timer-store";
+import { VolumeContext, type VolumeStoreType, VolumeStore } from "~/lib/volume-store";
+import { BookmarkContext, type BookmarkStoreType, BookmarkStore } from "~/lib/bookmark-store";
+import { HistoryContext, type HistoryStoreType, HistoryStore } from "~/lib/history-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 

@@ -1,4 +1,4 @@
-import { $, component$, QRL, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik"
+import { $, component$, type QRL, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik"
 import styles from './style.module.css'
 import { BookmarkContext } from "~/lib/bookmark-store"
 import { isServer } from "@builder.io/qwik/build"
@@ -23,6 +23,7 @@ export const BookmarkButton = component$(({
     onRemove
   } = useContext(BookmarkContext)
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     onAdd(() => {
       adding.value = true

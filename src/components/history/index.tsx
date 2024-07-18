@@ -1,7 +1,7 @@
-import { $, component$, QRL, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, type QRL, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 
-import { YoutubeVideo } from "~/lib/search";
+import { type YoutubeVideo } from "~/lib/search";
 import { type YoutubeVideoHistory } from "~/lib/history-store/db";
 import { VideoContext } from "~/lib/video-store";
 import { HistoryContext } from "~/lib/history-store";
@@ -114,7 +114,7 @@ export const History = component$(() => {
     
   })
 
-
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
 
     onWrite(( data: YoutubeVideoHistory ) => {
@@ -139,6 +139,7 @@ export const History = component$(() => {
     })
   })
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     loadInitHistory()
   })

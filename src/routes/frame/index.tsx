@@ -5,6 +5,7 @@ export default component$(() => {
 
   const ytid = useSignal('')
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     const params = new URLSearchParams(window.location.search.replace(/^\?/,''))
     ytid.value = params.get('id') || ''
