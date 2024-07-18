@@ -10,7 +10,7 @@
     gap: 1rem;
     cursor: pointer;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     
     input{ display: none; }
 
@@ -27,9 +27,14 @@
     span:last-child{
       margin-right: 8px;
       display: flex;
-      justify-content: center;
       align-items: center;
       gap: 8px;
+
+      svg{
+        width: 24px;
+        height: 24px;
+        padding: 4px;
+      }
     }
 
     input + span {

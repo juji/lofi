@@ -13,10 +13,7 @@ export const AutoplayContext = createContextId<AutoplayStoreType>('AutoplayConte
 
 export const AutoPlayStore: AutoplayStoreType = {
   autoplay: false,
-  // secondload: false,
-  // onFirstLoad: $(function(this: AutoplayStoreType){
-  //   this.secondload = true
-  // }),
+  
   on: $(function(this: AutoplayStoreType){
     this.autoplay = true
     localStorage.setItem('autoplay', '1')

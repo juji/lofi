@@ -11,6 +11,9 @@ export type VideoStoreType = {
   onChange: QRL<(this:VideoStoreType, key: string, fn:(video: YoutubeVideo) => void) => void>
 
   init: QRL<(this:VideoStoreType) => void>
+
+  loop: boolean
+  setLoop: QRL<(this:VideoStoreType, bool: boolean) => void>
 }
 
 export const VideoContext = createContextId<VideoStoreType>('VideoContext');
@@ -32,6 +35,7 @@ export const VideoStore: VideoStoreType = {
   }),
   change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true){
     this.video = video
+    this.loop =false
     localStorage.setItem('video', JSON.stringify(video))
     for( let key in this.onChangeListener ){
       if(!report && key === 'history') continue;
@@ -66,6 +70,11 @@ export const VideoStore: VideoStoreType = {
       "isLive":true
     })
 
+  }),
+
+  loop: false,
+  setLoop: $(function(this:VideoStoreType, bool: boolean){
+    this.loop = bool
   })
 
 }

@@ -15,12 +15,13 @@ import { HistoryContext, type HistoryStoreType, HistoryStore } from "~/lib/histo
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 import { keyboardListeners } from "~/lib/keyboard-listeners";
+import { initAction } from "~/lib/init-action";
 
 export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    await appWindow.setMinSize(new LogicalSize(700, 670));
+    await appWindow.setMinSize(new LogicalSize(700, 715));
     await appWindow.setMaxSize(new LogicalSize(3840, 2180));
   })
 
@@ -49,13 +50,16 @@ export default component$(() => {
   useContextProvider(HistoryContext, historyStore)
 
   // eslint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
 
     keyboardListeners()
     historyStore.init( videoStore )
     videoStore.init()
     autoplayStore.init()
     bookmarkStore.init()
+
+    console.log('asdf')
+    initAction()
 
   },{ strategy: 'document-ready' })
 

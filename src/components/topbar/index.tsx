@@ -74,7 +74,7 @@ const HistoryItem = component$<HistoryItemProps>(({
 
 })
 
-export const History = component$(() => {
+export const TopBar = component$(() => {
 
   const isOpen = useSignal(false)
   const multiChecked = useSignal(false)
@@ -217,11 +217,11 @@ export const History = component$(() => {
   return <div class={styles.container}>
     <div class={styles.buttons}>
       {/* <LeftButton /> */}
-      <button 
+      {/* <button 
         class={`${styles.history} ${isOpen.value ? styles.active : ''}`} 
         onClick$={$(() => isOpen.value = !isOpen.value)}>
         History
-      </button>
+      </button> */}
       {/* <RightButton /> */}
     </div>
     <div 

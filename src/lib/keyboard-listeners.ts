@@ -1,58 +1,46 @@
 
-
-let zoomLevel = 1
+import { 
+  zoomIn,
+  zoomNormalize,
+  zoomOut,
+  refresh,
+  saearchBarFocus 
+} from "./browser-utils";
 
 export function keyboardListeners(){
 
   window.addEventListener('keydown', function(e: KeyboardEvent) {
 
-    // refresh the search
+    if (e.key === 'r' && (e.metaKey || e.ctrlKey) && e.shiftKey) {
+      window.location.reload()
+    }
+
     if (e.key === 'f5' && e.ctrlKey) {
-      const button = document.querySelector('#lofiapprefresh')
-      if(button) (button as HTMLButtonElement).click()
+      refresh()
     }
 
     if (e.key === 'r' && (e.metaKey || e.ctrlKey)) {
-      const button = document.querySelector('#lofiapprefresh')
-      if(button) (button as HTMLButtonElement).click()
+      refresh()
     }
 
-    // go to search bar
     if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
-      const input = document.querySelector('#lofiappsearchbar')
-      if(input) (input as HTMLInputElement).focus()
+      saearchBarFocus()
     }
 
-    // zoom normalize
     if (e.key === '0' && (e.metaKey || e.ctrlKey)) {
-      // @ts-expect-error
-      document.body.style.zoom = '1'
+      zoomNormalize()
+    }
+
+    if (e.key === '+' && (e.metaKey || e.ctrlKey)) {
+      zoomIn()
     }
     
-    // zoom in
     if (e.key === '=' && (e.metaKey || e.ctrlKey)) {
-      // @ts-expect-error
-      if(!document.body.style.zoom){
-        // @ts-expect-error
-        document.body.style.zoom = (zoomLevel + .1) + ''
-      }else{
-        // @ts-expect-error
-        zoomLevel = Number(document.body.style.zoom)
-        // @ts-expect-error
-        document.body.style.zoom = (Number(document.body.style.zoom) + .1) + ''
-      }
+      zoomIn()
     }
 
-    // zoom out
     if (e.key === '-' && (e.metaKey || e.ctrlKey)) {
-      // @ts-expect-error
-      if(!document.body.style.zoom){
-        // @ts-expect-error
-        document.body.style.zoom = (zoomLevel - .1) + ''
-      }else{
-        // @ts-expect-error
-        document.body.style.zoom = (Number(document.body.style.zoom) - .1) + ''
-      }
+      zoomOut()
     }
   });
 

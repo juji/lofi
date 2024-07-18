@@ -7,12 +7,14 @@ const BookmarkIcon = () => <svg width="24" height="24" viewBox="0 0 24 24" fill=
 
 type BookmarkButtonProps = {
   classNames: string
+  open: boolean
   onClick: QRL<() => void>
 }
 
 export const BookmarkButton = component$(({
   classNames, 
-  onClick
+  onClick,
+  open
 }: BookmarkButtonProps) => {
 
   const adding = useSignal(false)
@@ -20,8 +22,16 @@ export const BookmarkButton = component$(({
 
   const {
     onAdd,
-    onRemove
+    onRemove,
+    load,
+    unload
   } = useContext(BookmarkContext)
+
+  const localOnClick = $(() => {
+    onClick()
+    if(open) unload()
+    else load()
+  })
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -46,19 +56,19 @@ export const BookmarkButton = component$(({
   useTask$(({ track }) => {
     track(() => removing.value)
     if(isServer) return;
-
     if(removing.value) setTimeout(() => {
       removing.value = false
     },500)
   })
 
-  return <button 
+  return <button
+    id="lofibookmarkbtn" 
     class={`${classNames}
     ${styles.bookmarkButton}
     ${adding.value ? styles.adding : ''}
     ${removing.value ? styles.removing : ''}
     `}
-    onClick$={$(() => onClick())}>
+    onClick$={$(() => localOnClick())}>
     <BookmarkIcon />
   </button>
 

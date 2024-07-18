@@ -1,4 +1,33 @@
 
+.result{
+
+  display: grid;
+  padding: 13px;
+  gap: 13px;
+  grid-template-columns: 1fr;
+
+  overflow: auto;
+  max-height: calc(80vh - 57px);
+  position: relative;
+
+  @media (min-width: 600px){
+    max-height: calc(100vh - 57px);
+  }
+
+  @media (min-width: 800px){
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1000px){
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media (min-width: 1600px){
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+}
+
 .component{
 
   --button-hover: rgb(230, 34, 99);
@@ -10,137 +39,6 @@
 
   @media (min-width: 600px){
     height: 100vh;
-  }
-
-  .result{
-
-    display: grid;
-    padding: 13px;
-    gap: 13px;
-    grid-template-columns: 1fr;
-
-    overflow: auto;
-    max-height: calc(80vh - 57px);
-    position: relative;
-
-    @media (min-width: 600px){
-      max-height: calc(100vh - 57px);
-    }
-
-    @media (min-width: 800px){
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (min-width: 1000px){
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    @media (min-width: 1600px){
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-
-    .thumbnail{
-      width: 100%;
-      position: relative;
-      padding-top: 56.25%;
-      overflow: hidden;
-      background-position: center center;
-      background-size: 100% 100%;
-      transition: background-size 100ms;
-      border-radius: 5px;
-
-      &:hover{
-        background-size: 105% 105%;
-      }
-
-      &:active{
-        background-size: 100% 100%;
-      }
-
-      & > span.isLive{
-        position: absolute;
-        bottom: 8px;
-        left: 8px;
-        padding: 2px 8px;
-        background-color: rgb(240, 0, 0);
-        color: rgb(228, 228, 228);
-        border-radius: 3px;
-      }
-
-      outline-offset: 5px;
-      &:has(.thumbnailButton:focus){
-        outline: 2px solid rgba(255, 80, 80, 0.5);
-      }
-
-      button{
-        position: absolute;
-
-        &.thumbnailButton{
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-        }
-
-        &.bookmarkButton{
-          bottom: 5px;
-          right: 5px;
-          padding: 2px;
-          border-radius: 3px;
-          color: rgb(228, 228, 228);
-
-          & svg{
-            width: 34px;
-            height: 34px;
-          }
-
-          &:hover, &:focus{
-            background: rgba(255,255,255,0.5);
-            color: var(--button-hover);
-          }
-
-          &.on{
-            background: var(--button-hover);
-            &:hover, &:focus{
-              background: white;
-            }
-          }
-    
-          &:active{
-            color: var(--button-active);
-          }
-        }
-
-        &.removeBookmark{
-          bottom: unset;
-          top: 5px;
-        }
-      }
-    }
-
-    
-
-  }
-
-  .bookmarks{
-
-    h2{
-      padding: 1rem;
-      background-color: rgba(0, 0, 0, 0.2);
-      border-bottom: 1px solid #333;
-      position: sticky;
-      top:0;
-      left:0;
-      width: 100%;
-    }
-
-    .result{
-      max-height: calc(80vh - 67px - 57px);
-
-      @media (min-width: 600px){
-        max-height: calc(100vh - 67px - 57px);
-      }
-    }
   }
 
   .topbar{

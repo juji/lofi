@@ -1,4 +1,5 @@
 import { 
+  $,
   component$, useContext, 
   useId, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
@@ -41,7 +42,8 @@ export const YoutubeFrame = component$(() => {
   const iframe = useId()
 
   const { 
-    video 
+    video,
+    loop
   } = useContext(VideoContext)
   
   const { 
@@ -51,7 +53,7 @@ export const YoutubeFrame = component$(() => {
   } = useContext(BookmarkContext)
 
   const { 
-    autoplay, 
+    autoplay,
   } = useContext(AutoplayContext)
 
   const { 
@@ -96,6 +98,15 @@ export const YoutubeFrame = component$(() => {
         if(data.event === 'ready'){
 
           if(autoplay && !firstOpen.value && !data.data.wasDone) {
+            frame.contentWindow?.postMessage( { 
+              event: 'play',
+              data: {
+                masterVolume: master
+              } 
+            }, window.location.origin)
+          }
+
+          else if(data.data.wasDone && loop){
             frame.contentWindow?.postMessage( { 
               event: 'play',
               data: {

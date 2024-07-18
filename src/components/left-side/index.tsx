@@ -1,13 +1,13 @@
 import { component$ } from "@builder.io/qwik";
 import styles from './style.module.css'
-import { History } from "../history";
+import { TopBar } from "../topbar";
 import { YoutubeFrame } from "../youtube-frame";
 import { Settings } from "../settings";
 
 export const LeftSide = component$(() => {
 
   return <div class={styles.container}>
-    <History />
+    <TopBar />
     <YoutubeFrame />
     <Settings />
   </div>
