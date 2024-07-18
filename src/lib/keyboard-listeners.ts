@@ -25,24 +25,32 @@ export function keyboardListeners(){
 
     // zoom normalize
     if (e.key === '0' && (e.metaKey || e.ctrlKey)) {
+      // @ts-expect-error
       document.body.style.zoom = '1'
     }
     
     // zoom in
     if (e.key === '=' && (e.metaKey || e.ctrlKey)) {
+      // @ts-expect-error
       if(!document.body.style.zoom){
+        // @ts-expect-error
         document.body.style.zoom = (zoomLevel + .1) + ''
       }else{
+        // @ts-expect-error
         zoomLevel = Number(document.body.style.zoom)
+        // @ts-expect-error
         document.body.style.zoom = (Number(document.body.style.zoom) + .1) + ''
       }
     }
 
     // zoom out
     if (e.key === '-' && (e.metaKey || e.ctrlKey)) {
+      // @ts-expect-error
       if(!document.body.style.zoom){
+        // @ts-expect-error
         document.body.style.zoom = (zoomLevel - .1) + ''
       }else{
+        // @ts-expect-error
         document.body.style.zoom = (Number(document.body.style.zoom) - .1) + ''
       }
     }
