@@ -125,6 +125,13 @@ export const Search = component$(() => {
 
     }
 
+    const results = document.querySelector(`.${styles.result}`)
+    if(results) (results as HTMLDivElement).scrollTo({
+      top:0,
+      left:0,
+      behavior: 'smooth'
+    })
+
   })
 
   const getNextPage = $(( n: unknown ) => {
