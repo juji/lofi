@@ -165,24 +165,19 @@ export const Search = component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
 
-    // searchYoutube("lofi")
-
     const options = {
       root: document.querySelector('body'),
     };
     
     const callback = (entries:IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-
         if(entry.isIntersecting){
-          
           if(!data.items.length) {
             searchYoutube(textValue.value)
           }
           else if(data.items.length && data.nextPage){
             getNextPage(data.nextPage)
           }
-
         }
       });
     };
@@ -190,8 +185,6 @@ export const Search = component$(() => {
     const observer = new IntersectionObserver(callback, options);
     const target = document.querySelector(`.${styles.loader}`);
     target && observer.observe(target);
-    
-
   },{ strategy: 'document-ready' })
 
   return <div class={styles.component}>
