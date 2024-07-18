@@ -1,4 +1,4 @@
-import { $, component$, QRL, useContext, useSignal } from "@builder.io/qwik";
+import { $, component$, QRL, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 
 import data from './data.json'
@@ -106,9 +106,14 @@ export const History = component$(() => {
     },200)
   })
 
-  onVideoChange('history-list', (video:YoutubeVideo) => {
-    isOpen.value = false
+  useVisibleTask$(() => {
+
+    onVideoChange('history-list', (video:YoutubeVideo) => {
+      isOpen.value = false
+    })
+    
   })
+
 
   const loadMoreHistory = $(() => {
 
