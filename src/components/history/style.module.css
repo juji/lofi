@@ -91,6 +91,7 @@
         grid-template-columns: 56px 1fr auto;
         border-bottom: 1px solid #333;
 
+        
         &>span:first-child{
           padding: 21px;
           border-right: 1px solid #333;
@@ -98,11 +99,15 @@
           justify-content: center;
           align-items: top;
         }
-
+        
         &>div{
           display: grid;
           grid-template-columns: auto 55px;
           grid-template-rows: 1fr auto;
+          
+          &:has(.imageButton:hover){
+            background: #111;
+          }
 
           &>button.imageButton{
             grid-column-start: 1;
