@@ -1,5 +1,4 @@
 import { 
-  $,
   component$, useContext, 
   useId, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'

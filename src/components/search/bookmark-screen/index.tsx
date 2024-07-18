@@ -1,6 +1,6 @@
-import { $, component$, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, useContext, useSignal } from "@builder.io/qwik";
 import styles from './style.module.css'
-import { BookmarkContext, BookmarkStoreType, get, set } from "~/lib/bookmark-store";
+import { BookmarkContext, get, set } from "~/lib/bookmark-store";
 import { Thumbnail } from "../thumbnail";
 import mainStyles from '../style.module.css'
 
@@ -28,7 +28,7 @@ export const openBookmark = async () => {
 
 export const downloadBookmarks = async (text: string) => {
 
-  const d = new Date().toJSON().replace(/\:/g,'-').replace(/\./g,'-')
+  const d = new Date().toJSON().replace(/:/g,'-').replace(/\./g,'-')
   const filename = `bookmark-${d}.lofi`
 
   // @ts-expect-error
@@ -55,7 +55,7 @@ export const BookmarkScreen = component$(function(){
     <div class={styles.header}>
       <h2>Bookmarks</h2>
       <button 
-        onClick$={$((e) => {
+        onClick$={$(() => {
           openBookmark().then(str => {
             if(!str) return;
             const { type, data } = parse(str||'')
@@ -73,7 +73,7 @@ export const BookmarkScreen = component$(function(){
         })}
       >import</button>
       <button 
-        onClick$={$((e) => {
+        onClick$={$(() => {
           try{
             const data = get()
             const d = mark( 'bookmark', data )

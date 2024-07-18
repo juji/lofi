@@ -14,7 +14,7 @@ import {
 } from '~/lib/search'
 
 import { Loader } from './loader';
-import { BookmarkContext, BookmarkStoreType } from '~/lib/bookmark-store';
+import { BookmarkContext } from '~/lib/bookmark-store';
 import { BookmarkButton } from './bookmark-button';
 
 import cacheddata from './data'
@@ -199,7 +199,7 @@ export const Search = component$(() => {
         onClick={$(() => {bookmarkOpen.value = !bookmarkOpen.value})}
       />
     </div>
-    { bookmarkOpen.value ? (<BookmarkScreen />) : (
+    { bookmarkOpen.value ? <BookmarkScreen /> : (
       <div class={styles.result}>
         {data.items.map((v,i) => <Thumbnail 
           key={`${v.id}${i}`} 
