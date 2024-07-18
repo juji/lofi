@@ -9,7 +9,7 @@
     --dimension: 55px;
 
     position: absolute;
-    bottom: calc( -1 * (var(--dimension) - 8px) );
+    bottom: calc( -1 * (var(--dimension) - 9px) );
     right: 13px;
     z-index: 2;
     cursor: pointer;

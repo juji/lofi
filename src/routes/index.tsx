@@ -14,6 +14,7 @@ import { BookmarkContext, type BookmarkStoreType, BookmarkStore } from "~/lib/bo
 import { HistoryContext, type HistoryStoreType, HistoryStore } from "~/lib/history-store";
 
 import { appWindow, LogicalSize } from '@tauri-apps/api/window';
+import { keyboardListeners } from "~/lib/keyboard-listeners";
 
 export default component$(() => {
 
@@ -50,6 +51,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
 
+    keyboardListeners()
     historyStore.init( videoStore )
     videoStore.init()
     autoplayStore.init()
