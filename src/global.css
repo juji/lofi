@@ -3,9 +3,28 @@
   --color: #c6c6c6;
 }
 
+html,body{
+  height: 100%;
+}
+
 body{
   background-color: black;
   color: var(--color);
+
+  zoom: 100%;
+
+  @media(min-width: 1921px){
+    zoom: 150%;
+  }
+
+  @media(min-width: 2561px){
+    zoom: 180%;
+  }
+
+  @media(min-width: 3009px){
+    zoom: 200%;
+  }
+
 }
 
 .app{

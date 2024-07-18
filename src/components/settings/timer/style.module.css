@@ -3,6 +3,7 @@
 .container{
 
   margin-top: 1rem;
+  width: 100%;
 
   h3{
     margin: 1rem 0;
@@ -26,7 +27,6 @@
   .hourinput{
 
     margin: 0.5rem 0;
-    display: flex;
     outline-offset: 2px;
     border-radius: 5px;
 

@@ -9,13 +9,13 @@
 
   input[type="range"] {
     position: relative;
-    top: 13px;
+    height: 34px;
+    top: calc( 17px - 10px );
     appearance: none;
     background-color: transparent;
     display: block;
     width: 100%;
     border-radius: 3px;
-    height: 34px;
     cursor: grab;
 
     &::-webkit-slider-thumb {
