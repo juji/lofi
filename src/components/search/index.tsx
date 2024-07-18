@@ -189,7 +189,8 @@ export const Search = component$(() => {
 
   return <div class={styles.component}>
     <div class={styles.topbar}>
-      <button 
+      <button
+        id="lofiapprefresh" 
         onClick$={$(() => {
           onReload()
         })}
@@ -198,6 +199,7 @@ export const Search = component$(() => {
         <div>
           <input 
             tabIndex={0}
+            id={'lofiappsearchbar'}
             type="text" value={textValue.value}
             name="search" placeholder="search" />
         </div>
