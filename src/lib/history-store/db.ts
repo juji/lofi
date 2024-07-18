@@ -39,7 +39,7 @@ export async function store(): Promise<IDBDatabase>{
     };
     
     request.onerror = function(event) {
-      console.log('on error', event)
+      console.error('indexedDB error', event)
       j(new Error('open indexedDB failed'))
     };
 
@@ -73,15 +73,15 @@ export async function write(video: YoutubeVideo): Promise<YoutubeVideoHistory>{
       };
     
       add.onerror = function(e){
-        console.log('error adding', video)
-        console.log('error:', e)
+        console.error('error adding', video)
+        console.error('error:', e)
         j(e)
         db.close()
       }
 
     }catch(e){
-      console.log('error while adding', video)
-      console.log('error:', e)
+      console.error('error while adding', video)
+      console.error('error:', e)
       j(e)
       db.close()
     }

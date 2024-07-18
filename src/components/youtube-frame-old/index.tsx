@@ -29,7 +29,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
 
     const inter = setInterval(() => {
 
-      console.log('inter')
       if(typeof YT === 'undefined') return;
       if(typeof YT.Player === 'undefined') return;
 
@@ -48,7 +47,6 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
         
         if(event.data === YT.PlayerState.PLAYING){
           // playing(id)
-          console.log('player.getVolume', player.getVolume)
         }
     
         if(event.data === YT.PlayerState.ENDED){
@@ -57,20 +55,15 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
       }
   
       function onPlayerReady(){
-        console.log('player ready')
         player.setVolume(100)
         if(autoplay) player.playVideo()
       }
-
-      console.log('video changed, setting up fadeout')
-      console.log(player)
 
       clearInterval(inter)
 
     },300)
 
     cleanup(() => {
-      console.log('video changed, cleaning up')
       player.destroy()
     })
 

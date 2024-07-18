@@ -25,7 +25,6 @@ export const HistoryStore: HistoryStoreType = {
   init: $(async function(this: HistoryStoreType, videoStore: VideoStoreType){
 
     videoStore.onChange('history', (video:YoutubeVideo) => {
-      console.log('adding history', video)
       this.add(video)
     })
 

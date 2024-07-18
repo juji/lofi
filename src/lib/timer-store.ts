@@ -56,7 +56,6 @@ export const TimerStore:TimerStoreType = {
     this.videoRunning = val
     
     if(this.videoRunning && this.hours && !this.started){
-      console.log('starting timer')
       this._start()
     }
     

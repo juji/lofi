@@ -115,9 +115,7 @@ export const History = component$(() => {
   })
 
   const loadInitHistory = $(() => {
-    console.log('loading history')
     get(lastId.value).then(v => {
-      console.log('history result', v)
       history.value = v
       lastId.value = v[v.length-1].key
     }).catch(e => {
@@ -146,7 +144,7 @@ export const History = component$(() => {
 
   const loadMoreHistory = $(() => {
     get(lastId.value).then(v => {
-      console.log('history result', v)
+      
       if(!v.length) {
         showNext.value = false
         return;
