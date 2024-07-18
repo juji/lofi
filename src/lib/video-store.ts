@@ -35,8 +35,10 @@ export const VideoStore: VideoStoreType = {
     localStorage.setItem('video', JSON.stringify(video))
     for( let key in this.onChangeListener ){
       if(!report && key === 'history') continue;
-      this.onChangeListener[key] &&
-      this.onChangeListener[key](video)
+      if(this.onChangeListener[key]){
+        const listener = this.onChangeListener[key]
+        listener && listener(video)
+      }
     }
   }),
 
