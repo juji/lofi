@@ -1,11 +1,6 @@
 import { YoutubeVideo } from "../search";
 
-
-
 export function videoToObject(video: YoutubeVideo): YoutubeVideo{
-
-  console.log('ori', video)
-  console.log('cloned', structuredClone(video))
 
   return {
     channelTitle: video.channelTitle,

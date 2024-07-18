@@ -1,30 +1,22 @@
-import { $, component$, QRL, useContext, useSignal, useVisibleTask$ } from "@builder.io/qwik";
+import { $, component$, QRL, useContext, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 
-import data from './data.json'
 import { YoutubeVideo } from "~/lib/search";
-import { YoutubeVideoHistory } from "~/lib/history-store/db";
+import { type YoutubeVideoHistory } from "~/lib/history-store/db";
 import { VideoContext } from "~/lib/video-store";
-
-const history = (data.items as YoutubeVideo[]).map(v => {
-
-  return {
-    video: v as YoutubeVideo,
-    key: new Date().toISOString(),
-    date: new Date()
-  } as YoutubeVideoHistory
-
-})
+import { HistoryContext } from "~/lib/history-store";
 
 type HistoryItemProps = {
   closeHistory: QRL<() => void>
   onCheckToggle: QRL<() => void>
+  onRemove: QRL<(item: YoutubeVideoHistory) => void>
   item: YoutubeVideoHistory
 }
 
 const HistoryItem = component$<HistoryItemProps>(({
   closeHistory,
   onCheckToggle,
+  onRemove,
   item: v
 }) => {
 
@@ -33,15 +25,10 @@ const HistoryItem = component$<HistoryItemProps>(({
 
   const { change } = useContext(VideoContext)
 
-  // const onClick = $((video: YoutubeVideo) => {
-  //   change(video)
-  // })
-
-  const onDelete = $((video: YoutubeVideo) => {
-    // change(video)
-    // closeHistory()
+  const onClick = $((video: YoutubeVideo) => {
+    change(video)
+    closeHistory()
   })
-  
 
   return <div key={v.key} class={styles.historyItem}>
   <span>
@@ -55,7 +42,7 @@ const HistoryItem = component$<HistoryItemProps>(({
   </span>
   <div>
     <button class={styles.imageButton} 
-      onClick$={$(() => change(v.video))}
+      onClick$={$(() => onClick(v.video))}
     >
       <img src={v.video.thumbnail.thumbnails[0].url} 
         width={v.video.thumbnail.thumbnails[0].width} 
@@ -65,7 +52,7 @@ const HistoryItem = component$<HistoryItemProps>(({
     <div class={styles.date}>
       {v.date.toLocaleString()}
       <button class={`${styles.deleteConfirm} ${isDeleting.value ? styles.open : ''}`} 
-        onClick$={$(() => onDelete(v.video))}>
+        onClick$={$(() => onRemove(v))}>
         <span>Click here to remove</span>
       </button>
     </div>
@@ -90,9 +77,6 @@ export const History = component$(() => {
   const isOpen = useSignal(false)
   const multiChecked = useSignal(false)
   const selectedLength = useSignal(0)
-  const {
-    onChange: onVideoChange
-  } = useContext(VideoContext)
 
   const onCheckToggle = $(() => {
     setTimeout(() => {
@@ -106,16 +90,113 @@ export const History = component$(() => {
     },200)
   })
 
+  const { get, onWrite, remove } = useContext(HistoryContext)
+  const history = useSignal<YoutubeVideoHistory[]>([])
+  const lastId = useSignal<string|undefined>(undefined)
+  const showNext = useSignal(true)
+
+  const onRemove = $(function(item: YoutubeVideoHistory ){
+    remove(item)
+    history.value = history.value.filter(v => v.key !== item.key)
+  })
+
   useVisibleTask$(() => {
 
-    onVideoChange('history-list', (video:YoutubeVideo) => {
-      isOpen.value = false
+    onWrite(( data: YoutubeVideoHistory ) => {
+
+      const clen = history.value.length
+      history.value = [
+        data,
+        ...clen <= 10 ? history.value.slice(0,9) : history.value
+      ]
+
     })
-    
+
+  })
+
+  const loadInitHistory = $(() => {
+    console.log('loading history')
+    get(lastId.value).then(v => {
+      console.log('history result', v)
+      history.value = v
+      lastId.value = v[v.length-1].key
+    }).catch(e => {
+      console.error('get history error')
+      console.error(e)
+    })
+  })
+
+  useVisibleTask$(() => {
+    loadInitHistory()
+  })
+
+  useTask$(({ track }) => {
+
+    track(() => isOpen.value)
+    track(() => history.value)
+
+    if(!isOpen.value) return;
+    if(history.value.length) return;
+
+    loadInitHistory()
+
   })
 
 
+
   const loadMoreHistory = $(() => {
+    get(lastId.value).then(v => {
+      console.log('history result', v)
+      if(!v.length) {
+        showNext.value = false
+        return;
+      }
+
+      history.value = [
+        ...history.value,
+        ...v
+      ]
+
+      lastId.value = v[v.length-1].key
+
+    }).catch(e => {
+      console.error('get history error')
+      console.error(e)
+    })
+  })
+
+  useTask$(({ track, cleanup }) => {
+
+    track(() => !!history.value.length)
+    track(() => showNext.value)
+
+    if(!showNext.value) return;
+    if(!history.value.length) return;
+
+    const options = {
+      root: document.querySelector('body'),
+    };
+    
+    const callback = (entries:IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if(entry.isIntersecting){
+          loadMoreHistory()
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    setTimeout(() => {
+      
+      const target = document.querySelector(`div.${styles.loadMore}`);
+      if(!target) return;
+      observer.observe(target);
+
+    },500)
+
+    cleanup(() => {
+      observer.disconnect()
+    })
 
   })
 
@@ -163,20 +244,22 @@ export const History = component$(() => {
           </span>}
           
         </div>
-        {!history.length ? <div class={styles.empty}>
+        {!history.value.length ? <div class={styles.empty}>
           Start watching to see history...
         </div> : null}
-        {history.map(v => {
+        {history.value.map(v => {
 
-          return <HistoryItem 
+          return <HistoryItem
+            key={v.key}
+            onRemove={$((item) => onRemove( item ))}
             closeHistory={$(() => {isOpen.value = false})}
             onCheckToggle={$(() => onCheckToggle())}
             item={v}
           />
 
         })}
-        { history.length ? <div class={styles.loadMore}>
-          <button onClick$={$(() => loadMoreHistory())}>Load More</button>
+        { history.value.length && showNext.value ? <div class={styles.loadMore}>
+          <p>Loading...</p>
         </div> : null}
       </div>
     </div>

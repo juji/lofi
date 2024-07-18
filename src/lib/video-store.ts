@@ -34,6 +34,7 @@ export const VideoStore: VideoStoreType = {
     this.video = video
     localStorage.setItem('video', JSON.stringify(video))
     for( let key in this.onChangeListener ){
+      if(!report && key === 'history') continue;
       this.onChangeListener[key] &&
       this.onChangeListener[key](video)
     }
@@ -49,7 +50,6 @@ export const VideoStore: VideoStoreType = {
     // load lofi the first time
     // or something else from ls
     const video = lsCheckGet('video',{ check: (d) => d.id && d.channelTitle })
-    console.log('ls video', video)
     if(video) this.change(video, false)
     else this.change({
       "id":"jfKfPfyJRdk","type":"video",

@@ -1,9 +1,10 @@
 import type { YoutubeVideo } from "../search"
+import { videoToObject } from "../utils/video-to-object"
 
 const dbName = 'history'
 const version = 3
 const storeName = `videos.v${version}`
-const pageSize = 5
+const pageSize = 10
 
 export type YoutubeVideoHistory = {
   key: string,
@@ -46,7 +47,7 @@ export async function store(): Promise<IDBDatabase>{
 
 }
 
-export async function write(video: YoutubeVideo){
+export async function write(video: YoutubeVideo): Promise<YoutubeVideoHistory>{
   
   const db = await store()
 
@@ -56,16 +57,18 @@ export async function write(video: YoutubeVideo){
 
       const transaction = db.transaction(storeName, 'readwrite')
       let objectStore = transaction.objectStore(storeName);
-      
+
       const date = new Date()
-      const add = objectStore.add({
+      const data = {
         key: date.toISOString(),
         date,
-        video: video
-      } as YoutubeVideoHistory)
+        video: videoToObject(video)
+      } as YoutubeVideoHistory
+      
+      const add = objectStore.add(data)
       
       add.onsuccess = function(e) {
-        r(video)
+        r(data)
         db.close()
       };
     
@@ -87,6 +90,41 @@ export async function write(video: YoutubeVideo){
 
 }
 
+export async function remove(key: string): Promise<YoutubeVideoHistory|null>{
+  const db = await store()
+  const transaction = db.transaction(storeName, "readonly");
+  const objectStore = transaction.objectStore(storeName);
+  const request = objectStore.openCursor( null, 'prev');
+
+  let data:YoutubeVideoHistory|null = null;
+
+  return new Promise((r,j) => {
+
+    request.onsuccess = (event) => {
+  
+      const cursor = request.result;
+      if(!cursor) {
+        db.close()
+        return r(data)
+      }
+      
+      if(cursor.key === key){
+        data = cursor.value
+        db.close()
+        return r(data)
+      }else{
+        cursor.continue(key)
+      }
+      
+    }
+
+    request.onerror = (e) => {
+      j(e)
+    }
+
+  })
+}
+
 export async function getPage(lastKey?: string): Promise<YoutubeVideoHistory[]>{
 
   const db = await store()
@@ -102,39 +140,44 @@ export async function getPage(lastKey?: string): Promise<YoutubeVideoHistory[]>{
     request.onsuccess = (event) => {
 
       const cursor = request.result;
-      if(!cursor) return j(new Error('cursor gone!'))
+      if(!cursor) {
+        db.close()
+        return r(data)
+      }
 
       if(data.length === pageSize){
+        db.close()
         return r(data)
       }
 
       if(!lastKey){
         data.push(cursor.value as YoutubeVideoHistory)
-        try{ cursor.continue(); }catch(e){ return r(data) }
-      }
-
-      else if(
-        lastKey && cursor.key !== lastKey
-      ){
-        try{ cursor.continue(lastKey); }catch(e){ return r(data) }
-      }
-
-      else if(
-        lastKey && cursor.key === lastKey
-      ){
-        jumpedToKey = true
-        try{ cursor.continue(); }catch(e){ return r(data) }
+        cursor.continue();
       }
 
       else if(
         lastKey && cursor.key !== lastKey && jumpedToKey
       ){
         data.push(cursor.value as YoutubeVideoHistory)
-        try{ cursor.continue(); }catch(e){ return r(data) }
+        cursor.continue();
+      }
+
+      else if(
+        lastKey && cursor.key !== lastKey
+      ){
+        cursor.continue(lastKey);
+      }
+
+      else if(
+        lastKey && cursor.key === lastKey
+      ){
+        jumpedToKey = true
+        cursor.continue();
       }
 
       else {
-        return j(new Error('don\'t know what heppened'))
+        db.close()
+        return j(new Error('don\'t know what happened'))
       }
     };
 
