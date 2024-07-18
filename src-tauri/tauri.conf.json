@@ -18,7 +18,8 @@
         "open": true
       },
       "window": {
-        "setMinSize": true
+        "setMinSize": true,
+        "setMaxSize": true
       },
       "http": {
         "all": true,

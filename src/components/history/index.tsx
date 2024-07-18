@@ -6,6 +6,8 @@ import { type YoutubeVideoHistory } from "~/lib/history-store/db";
 import { VideoContext } from "~/lib/video-store";
 import { HistoryContext } from "~/lib/history-store";
 
+import { LeftButton, RightButton } from "./history-buttons";
+
 type HistoryItemProps = {
   closeHistory: QRL<() => void>
   onCheckToggle: QRL<() => void>
@@ -99,6 +101,19 @@ export const History = component$(() => {
     remove(item)
     history.value = history.value.filter(v => v.key !== item.key)
   })
+
+  const removeMany = $(() => {
+
+    document.querySelectorAll(
+      '#historySelectorList input[value]:checked'
+    ).forEach(v => {
+      const id = (v as HTMLInputElement).value
+      const val = history.value.find(h => h.key === id)
+      val && onRemove(val)
+    })
+    
+  })
+
 
   useVisibleTask$(() => {
 
@@ -200,17 +215,13 @@ export const History = component$(() => {
 
   return <div class={styles.container}>
     <div class={styles.buttons}>
-      <button class={styles.prev}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg>
-      </button>
+      <LeftButton />
       <button 
         class={`${styles.history} ${isOpen.value ? styles.active : ''}`} 
         onClick$={$(() => isOpen.value = !isOpen.value)}>
         History
       </button>
-      <button class={styles.next}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg>
-      </button>
+      <RightButton />
     </div>
     <div 
       id="historySelectorList"
@@ -234,7 +245,7 @@ export const History = component$(() => {
             })} />
           </span>
           { multiChecked.value ? <div>
-            <button class={styles.deleteSelected}>
+            <button onClick$={$(() => removeMany())} class={styles.deleteSelected}>
               Click here to delete ({selectedLength.value})
             </button>
           </div> : <span>

@@ -20,6 +20,7 @@ export default component$(() => {
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
     await appWindow.setMinSize(new LogicalSize(700, 670));
+    await appWindow.setMaxSize(new LogicalSize(1920, 1080))
   })
 
   //
