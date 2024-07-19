@@ -4,8 +4,8 @@ import {
 } from "date-fns"
 import { maintainHistory } from "./history-store/db";
 
-// 24 hours
-const maintenancePeriod = 1000 * 60 * 60 * 24
+// 12 hours
+const maintenancePeriod = 1000 * 60 * 60 * 12
 
 // 1 min
 // const maintenancePeriod = 1000 * 60

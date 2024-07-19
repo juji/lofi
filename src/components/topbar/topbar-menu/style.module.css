@@ -30,9 +30,14 @@
 
   .history{
     padding: 0.4rem 0.9rem;
+
+    &.active{
+      color: rgb(236, 76, 76);
+    }
+
   }
 
-  .prev{
+  /* .prev{
     svg{
       position: relative;
       left: -0.1rem;
@@ -44,6 +49,6 @@
       position: relative;
       left: -0.15rem;
     }
-  }
+  } */
 
 }

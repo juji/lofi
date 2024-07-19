@@ -23,7 +23,7 @@ export const TopbarMenu = component$<TopbarMenuProps>(({
       <button 
         class={`${styles.history} ${isOpen ? styles.active : ''}`} 
         onClick$={onToggle}>
-        History
+        {isOpen ? 'Close History' : 'History'}
       </button>
     </div>
     {/* <div>
