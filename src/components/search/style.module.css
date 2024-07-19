@@ -35,11 +35,10 @@
 
   grid-area: panel;
   border-left: 1px solid #333;
-  height: 80vh;
-
-  @media (min-width: 600px){
-    height: 100vh;
-  }
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
 
   .topbar{
 
@@ -130,6 +129,12 @@
         }
       }
     }
+
+  }
+
+  .content{
+
+    position: relative;
 
   }
 

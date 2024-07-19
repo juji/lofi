@@ -199,7 +199,7 @@ export const Search = component$(() => {
         onClick={$(() => {bookmarkOpen.value = !bookmarkOpen.value})}
       />
     </div>
-    { bookmarkOpen.value ? <BookmarkScreen /> : (
+    <div class={styles.content}>
       <div class={styles.result}>
         {data.items.map((v,i) => <Thumbnail 
           key={`${v.id}${i}`} 
@@ -213,7 +213,8 @@ export const Search = component$(() => {
           <Loader />
         </div>
       </div> 
-    )}
+      <BookmarkScreen open={bookmarkOpen.value} />
+    </div>
 
     { err.value ? 
       <p class={styles.error}>Something bad is happening</p> : 

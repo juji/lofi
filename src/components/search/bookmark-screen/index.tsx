@@ -43,15 +43,21 @@ export const downloadBookmarks = async (text: string) => {
   }
 };
 
-export const BookmarkScreen = component$(function(){
+type BookmarkScreenParams = {
+  open: boolean
+}
 
-  const {
-    data
-  } = useContext(BookmarkContext)
+export const BookmarkScreen = component$<BookmarkScreenParams>(function({ open }){
 
-  const newBookmark = useSignal<YoutubeVideo[]|null>(null)
+  const { data } = useContext(BookmarkContext)
 
-  return <div class={styles.bookmarks}>
+  const importBookmark = useSignal<YoutubeVideo[]|null>(null)
+
+  return <div class={`
+    ${styles.bookmarks} 
+    ${open ? styles.open : ''} 
+    ${importBookmark.value ? styles.openImportDialog : ''}
+  `}>
     <div class={styles.header}>
       <h2>Bookmarks</h2>
       <button 
@@ -65,7 +71,7 @@ export const BookmarkScreen = component$(function(){
               ...data,
               ...oldBookmarks
             ]
-            newBookmark.value = bookmarks
+            importBookmark.value = bookmarks
           }).catch(e => {
             console.error(e)
             alert(e.toString())
@@ -85,35 +91,37 @@ export const BookmarkScreen = component$(function(){
         })}
       ><span>export</span></button>
     </div>
-    {newBookmark.value ? <div class={`${styles.newBookmark}`}>
+    <div class={`${styles.importBookmark} ${importBookmark.value ? styles.on : ''}`}>
       <p>
-        The file had {newBookmark.value && newBookmark.value.length} numbers of videos. 
+        The file had {importBookmark.value && importBookmark.value.length} numbers of videos. 
         Load them to current bookmark?
       </p>
       <p>
-        The window will need to restart.
+        Duplicate bookmark will be left as it is, and the window will need to restart.
       </p>
       <div>
         <button 
-          onClick$={$(() => newBookmark.value = null)}
-          class={styles.newBookmarkCancel}>Cancel</button>
-        <button 
           onClick$={$(() => {
-            if(!newBookmark.value) return;
-            set(newBookmark.value)
-            newBookmark.value = null
+            if(!importBookmark.value) return;
+            set(importBookmark.value)
+            importBookmark.value = null
             setInitAction('bookmark')
             window.location.reload()
           })}
-          class={styles.newBookmarkConfirm}>Yes</button>
+          class={styles.importBookmarkConfirm}>Yes</button>
+        <button 
+          onClick$={$(() => importBookmark.value = null)}
+          class={styles.importBookmarkCancel}>Cancel</button>
       </div>
-    </div> : null}
-    <div class={`${mainStyles.result} ${styles.result}`}>
-      {data.map(v => <Thumbnail 
-        key={v.id} 
-        video={v} 
-        bookmark={true}
-      />)}  
+    </div>
+    <div class={styles.resultContainer}>
+      <div class={`${mainStyles.result} ${styles.result}`}>
+        {data.map(v => <Thumbnail 
+          key={v.id} 
+          video={v} 
+          bookmark={true}
+        />)}  
+      </div>
     </div>
   </div>
 

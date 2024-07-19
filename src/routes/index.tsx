@@ -21,7 +21,7 @@ export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    await appWindow.setMinSize(new LogicalSize(700, 715));
+    await appWindow.setMinSize(new LogicalSize(700, 730));
     await appWindow.setMaxSize(new LogicalSize(3840, 2180));
   })
 
@@ -58,7 +58,6 @@ export default component$(() => {
     autoplayStore.init()
     bookmarkStore.init()
 
-    console.log('asdf')
     initAction()
 
   },{ strategy: 'document-ready' })
