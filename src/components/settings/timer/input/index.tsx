@@ -26,7 +26,7 @@ export const TimerInput = component$<TimerInputProps>(({
           onChange(t.valueAsNumber||0)
         })}
       />
-      <span>{value <= 1 ? 'hour' : `hours`}</span>
+      <span class={styles.hourText}>{value <= 1 ? 'hour' : `hours`}</span>
     </div>
     <button onClick$={$(() => onChange(value+1))}>
       <PlusIcon />

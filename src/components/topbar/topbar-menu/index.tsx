@@ -1,4 +1,4 @@
-import { $, component$, type QRL } from "@builder.io/qwik";
+import { component$, type QRL } from "@builder.io/qwik";
 import styles from './style.module.css'
 
 type TopbarMenuProps = {

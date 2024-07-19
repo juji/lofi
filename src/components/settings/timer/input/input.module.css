@@ -46,6 +46,10 @@
     display: grid;
     grid-template-columns: 8rem auto;
 
+    .hourText{
+      min-width: 75px;
+    }
+
     & > span{
       display: flex;
       align-items: center;

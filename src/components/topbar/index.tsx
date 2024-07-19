@@ -215,18 +215,18 @@ export const TopBar = component$(() => {
 
   })
 
-  const onNext = $(() => {
+  // const onNext = $(() => {
 
-  })
+  // })
   
-  const onPrev = $(() => {
+  // const onPrev = $(() => {
 
-  })
+  // })
 
   return <div class={styles.container}>
     <TopbarMenu 
-      onNext={onNext}
-      onPrev={onPrev}
+      // onNext={onNext}
+      // onPrev={onPrev}
       onToggle={$(() => { isOpen.value = !isOpen.value })}
       isOpen={isOpen.value}
     />
