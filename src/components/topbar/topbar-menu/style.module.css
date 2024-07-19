@@ -3,7 +3,47 @@
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 0.5rem;
+  padding: 0 1rem;
+  height: 100%;
 
-  
+  &>div{
+    display: flex;
+    align-items: center;
+  }
+
+  button{
+    border-radius: 5px;
+    border: 1px solid #333;
+    padding: 0.4rem 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover{
+      border: 1px solid #444;
+    }
+
+    &:active{
+      opacity: 0.7;
+    }
+  }
+
+  .history{
+    padding: 0.4rem 0.9rem;
+  }
+
+  .prev{
+    svg{
+      position: relative;
+      left: -0.1rem;
+    }
+  }
+
+  .next{
+    svg{
+      position: relative;
+      left: -0.15rem;
+    }
+  }
 
 }

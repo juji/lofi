@@ -14,6 +14,9 @@ export type HistoryStoreType = {
 
   onWriteListener: NoSerialize<(data: YoutubeVideoHistory) => void> | null
   onWrite: QRL<(this:HistoryStoreType, fn: (data: YoutubeVideoHistory) => void) => void> 
+
+  index: number
+  moveIndex: QRL<(this:HistoryStoreType, num: number) => void> 
   
 }
 
@@ -23,32 +26,38 @@ export const HistoryStore: HistoryStoreType = {
 
   videoStore: null,
   init: $(async function(this: HistoryStoreType, videoStore: VideoStoreType){
-
+    
     videoStore.onChange('history', (video:YoutubeVideo) => {
       this.add(video)
     })
-
+    
     this.videoStore = videoStore
-
+    
   }),
   
   add: $(async function(this: HistoryStoreType, video: YoutubeVideo){
     const data = await write(video)
     this.onWriteListener && this.onWriteListener(data)
   }),
-
+  
   remove: $(async function(this: HistoryStoreType, item: YoutubeVideoHistory){
     const history = await remove(item.key)
     return history
   }),
-
+  
   get: $(async function(this: HistoryStoreType, lastId?: string){
     return await getPage(lastId)
   }),
-
+  
   onWriteListener: null,
   onWrite: $(function(this:HistoryStoreType, fn: (data: YoutubeVideoHistory) => void){
     this.onWriteListener = noSerialize(fn)
-  }) 
+  }),
+  
+  index: 0,
+  moveIndex: $(function(this:HistoryStoreType, num: number){
+    this.index += num
+    
+  })
 
 }

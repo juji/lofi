@@ -5,6 +5,7 @@ import { type YoutubeVideo } from "~/lib/search";
 import { type YoutubeVideoHistory } from "~/lib/history-store/db";
 import { VideoContext } from "~/lib/video-store";
 import { HistoryContext } from "~/lib/history-store";
+import { TopbarMenu } from "./topbar-menu";
 
 // import { LeftButton, RightButton } from "./history-buttons";
 
@@ -214,16 +215,21 @@ export const TopBar = component$(() => {
 
   })
 
+  const onNext = $(() => {
+
+  })
+  
+  const onPrev = $(() => {
+
+  })
+
   return <div class={styles.container}>
-    <div class={styles.buttons}>
-      {/* <LeftButton /> */}
-      {/* <button 
-        class={`${styles.history} ${isOpen.value ? styles.active : ''}`} 
-        onClick$={$(() => isOpen.value = !isOpen.value)}>
-        History
-      </button> */}
-      {/* <RightButton /> */}
-    </div>
+    <TopbarMenu 
+      onNext={onNext}
+      onPrev={onPrev}
+      onToggle={$(() => { isOpen.value = !isOpen.value })}
+      isOpen={isOpen.value}
+    />
     <div 
       id="historySelectorList"
       class={`${styles.list} ${isOpen.value ? styles.open : ''}`}>
