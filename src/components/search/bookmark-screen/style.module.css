@@ -9,9 +9,9 @@
   display: grid;
   grid-template-rows: auto 0fr 1fr;
   z-index: 50000;
-  transition: top 200ms ease-out;
+  transition: top 300ms ease-in-out;
   background: rgba(0, 0, 0, 0.88);
-
+  
   &.open{
     top: 0%;
   }
