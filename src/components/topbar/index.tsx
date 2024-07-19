@@ -133,7 +133,7 @@ export const TopBar = component$(() => {
   const loadInitHistory = $(() => {
     get(lastId.value).then(v => {
       history.value = v
-      lastId.value = v[v.length-1].key
+      lastId.value = v.length ? v[v.length-1].key : undefined
     }).catch(e => {
       console.error('get history error')
       console.error(e)
@@ -172,7 +172,7 @@ export const TopBar = component$(() => {
         ...v
       ]
 
-      lastId.value = v[v.length-1].key
+      lastId.value = v.length ? v[v.length-1].key : undefined
 
     }).catch(e => {
       console.error('get history error')

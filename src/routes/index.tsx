@@ -17,6 +17,8 @@ import { appWindow, LogicalSize } from '@tauri-apps/api/window';
 import { keyboardListeners } from "~/lib/keyboard-listeners";
 import { initAction } from "~/lib/init-action";
 
+import { doMaintenance } from "~/lib/maintenance";
+
 export default component$(() => {
 
   // eslint-disable-next-line qwik/no-use-visible-task
@@ -59,6 +61,8 @@ export default component$(() => {
     bookmarkStore.init()
 
     initAction()
+
+    doMaintenance()
 
   },{ strategy: 'document-ready' })
 

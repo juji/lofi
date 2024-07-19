@@ -1,5 +1,9 @@
 import type { YoutubeVideo } from "../search"
 import { videoToObject } from "../utils/video-to-object"
+import { 
+  differenceInDays, 
+  // differenceInMinutes
+} from "date-fns";
 
 const dbName = 'history'
 const version = 3
@@ -179,6 +183,62 @@ export async function getPage(lastKey?: string): Promise<YoutubeVideoHistory[]>{
         db.close()
         return j(new Error('don\'t know what happened'))
       }
+    };
+
+    request.onerror = (e) => {
+      j(e)
+    }
+
+  })
+
+
+}
+
+
+// maintaining data
+// will remove data from one year ago
+export async function maintainHistory(): Promise<number>{
+
+  const db = await store()
+  const transaction = db.transaction(storeName, "readwrite");
+  const objectStore = transaction.objectStore(storeName);
+  const request = objectStore.openCursor( null, 'next');
+
+  const today = new Date()
+  let numOfDelete = 0
+  const numberOfDay = 365
+  return new Promise((r,j) => {
+
+    request.onsuccess = (event) => {
+
+      const cursor = request.result;
+      
+      if(!cursor) {
+        db.close()
+        return r(numOfDelete);
+      }
+      
+      // const diff = differenceInMinutes(
+      //   today,
+      //   cursor.value.date
+      // )
+
+      const diff = differenceInDays(
+        today,
+        cursor.value.date,
+      )
+
+      if(diff < numberOfDay){
+        db.close()
+        return r(numOfDelete);
+      }
+
+      if(diff >= numberOfDay){
+        cursor.delete()
+        numOfDelete++;
+        cursor.continue();
+      }
+      
     };
 
     request.onerror = (e) => {
