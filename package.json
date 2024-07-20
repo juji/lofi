@@ -15,7 +15,7 @@
     "clean": "kill-port 5173; rimraf ./node_modules/.vite; rimraf ./dist; rimraf ./server",
     "prebuild": "npm run clean",
     "build:qwik": "qwik build",
-    "build": "npx tauri build --target universal-apple-darwin",
+    "build": "npx tauri build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
     "build.server": "vite build -c adapters/static/vite.config.ts",

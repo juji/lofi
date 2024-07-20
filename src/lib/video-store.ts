@@ -5,7 +5,6 @@ import type { YoutubeVideo } from './search'
 export type VideoStoreType = {
   video: YoutubeVideo | null
   change: QRL<(this:VideoStoreType, video:YoutubeVideo, report?: boolean) => void>
-  getFromStorage: QRL<(this:VideoStoreType) => YoutubeVideo|null>
 
   onChangeListener: { [key: string]: NoSerialize<(video: YoutubeVideo) => void> }
   onChange: QRL<(this:VideoStoreType, key: string, fn:(video: YoutubeVideo) => void) => void>
@@ -20,30 +19,22 @@ export const VideoContext = createContextId<VideoStoreType>('VideoContext');
 
 export const VideoStore: VideoStoreType = {
   video: null,
-  getFromStorage: $(function(this: VideoStoreType){
-    const video = localStorage.getItem('video')
-    if(video){
-      try{
-        const v = JSON.parse(video)
-        if(!v.id || !v.channelTitle) {
-          localStorage.removeItem('video') 
-        }
-        return v
-      }catch(e){}
-    }
-    return null
-  }),
   change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true){
     if(this.video?.id === video.id) return;
+
     this.video = video
-    this.loop =false
+
     localStorage.setItem('video', JSON.stringify(video))
     for( let key in this.onChangeListener ){
       if(!report && key === 'history') continue;
+
+      // TS why?
+      // this.onChangeListener[key] && this.onChangeListener[key](video)
       if(this.onChangeListener[key]){
         const listener = this.onChangeListener[key]
         listener && listener(video)
       }
+
     }
   }),
 
