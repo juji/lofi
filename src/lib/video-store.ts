@@ -34,6 +34,7 @@ export const VideoStore: VideoStoreType = {
     return null
   }),
   change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true){
+    if(this.video?.id === video.id) return;
     this.video = video
     this.loop =false
     localStorage.setItem('video', JSON.stringify(video))
