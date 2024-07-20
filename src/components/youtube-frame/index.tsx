@@ -98,6 +98,7 @@ export const YoutubeFrame = component$(() => {
         if(data.event === 'ready'){
 
           if(playOnClick && !firstOpen.value && !data.data.wasDone) {
+            paused.value = false
             frame.contentWindow?.postMessage( { 
               event: 'play',
               data: {
@@ -107,6 +108,7 @@ export const YoutubeFrame = component$(() => {
           }
 
           else if(data.data.wasDone && loop){
+            paused.value = false
             frame.contentWindow?.postMessage({ 
               event: 'play',
             }, window.location.origin)
@@ -121,10 +123,11 @@ export const YoutubeFrame = component$(() => {
         }
         
         if(data.event === 'playing'){
+          const wasPaused = paused.value
           paused.value = false
           setVideoRunning(true)
 
-          if(video) for(let k in onPlayListener){
+          if(video && !wasPaused) for(let k in onPlayListener){
             onPlayListener[k] && onPlayListener[k](video, data.data.loop)
           }
         }

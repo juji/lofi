@@ -31,6 +31,7 @@ export const YoutubeVideo = component$<{
 
     let volume = 100
     let masterVolume = 100
+
     let downVolumeInterval: ReturnType<typeof setInterval>|null = null
     let upVolumeInterval: ReturnType<typeof setInterval>|null = null
 
@@ -51,7 +52,7 @@ export const YoutubeVideo = component$<{
       upVolumeInterval = setInterval(() => {
   
         if(volume >= 100) {
-          
+
           volume = 100
           videoElement.setVolume(volume * masterVolume / 100)
           upVolumeInterval && clearInterval(upVolumeInterval)
@@ -69,7 +70,7 @@ export const YoutubeVideo = component$<{
       window.top?.postMessage({ 
         event: 'playing',
         data: {
-          loop: wasDone
+          loop: wasDone,
         } 
       }, window.location.origin)
 
