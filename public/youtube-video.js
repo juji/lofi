@@ -79,6 +79,11 @@ class e extends HTMLElement {
         const t = new RegExp("https?:\\/\\/(?:[0-9A-Z-]+\\.)?(?:youtu\\.be\\/|youtube(?:-nocookie)?\\.com\\S*[^\\w\\s-])([\\w-]{11})(?=[^\\w-]|$)(?![?=&+%\\w.-]*(?:['\"][^<>]*>|<\\/a>))[?=&+%\\w.-]*", "ig");
         return this.src.replace(t, "$1")
     }
+
+    getPlayer(){
+      return this.ytPlayer
+    }
+
     play() {
         this.paused = !1, this.src ? this.ytPlayer && this.ytPlayer.playVideo() : this.error = new Error("you cannot call play() method on a video element that has no youtube source url")
     }

@@ -140,6 +140,8 @@ export const YoutubeVideo = component$<{
           // this waits for image to show up
           setTimeout(() => {
             videoElement.pause()
+
+            // and this didn't automagically fire
             // @ts-expect-error
             videoElement.dispatchEvent(new CustomEvent('pause'))
           },500)
