@@ -7,6 +7,8 @@ type Video = {
   pause: () => void
   setVolume: (n: number) => void
   getVolume: () => number
+  getCurrentTime: () => number
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void
   addEventListener: ( key: string, f: () => void ) => void
 }
 
@@ -35,6 +37,9 @@ export const YoutubeVideo = component$<{
     let downVolumeInterval: ReturnType<typeof setInterval>|null = null
     let upVolumeInterval: ReturnType<typeof setInterval>|null = null
 
+    let currentTimeInterval:ReturnType<typeof setInterval>|null = null
+    let elapsedTime = 0
+
     videoElement.addEventListener('loadstart', function () {
       window.top?.postMessage({ 
         event: 'ready',
@@ -45,6 +50,16 @@ export const YoutubeVideo = component$<{
     })
 
     videoElement.addEventListener('playing', function () {
+
+      currentTimeInterval = setInterval(() => {
+        elapsedTime = videoElement.getCurrentTime()
+        window.top?.postMessage({ 
+          event: 'elapsedTime',
+          data: {
+            elapsedTime
+          }  
+        }, window.location.origin)
+      },500)
       
       // fadein sound
       downVolumeInterval && clearInterval(downVolumeInterval)
@@ -74,16 +89,35 @@ export const YoutubeVideo = component$<{
         } 
       }, window.location.origin)
 
+      elapsedTime = videoElement.getCurrentTime()
+      window.top?.postMessage({ 
+        event: 'elapsedTime',
+        data: {
+          elapsedTime
+        }  
+      }, window.location.origin)
+
     });
     
     videoElement.addEventListener('pause', function () {
       window.top?.postMessage({ event: 'paused' }, window.location.origin)
+      if(currentTimeInterval) {
+        clearTimeout(currentTimeInterval)
+        currentTimeInterval = null
+        elapsedTime = videoElement.getCurrentTime()
+        window.top?.postMessage({ 
+          event: 'elapsedTime',
+          data: {
+            elapsedTime
+          }  
+        }, window.location.origin)
+      }
     });
     
     videoElement.addEventListener('ended', function () {
       window.top?.postMessage({ event: 'ended' }, window.location.origin)
       setTimeout(() => {
-        params.set('wasDone', '1')
+        params.set('wasDone', Math.random()+'')
         window.location.replace(
           window.location.pathname + '?' + params.toString()
         )
@@ -100,6 +134,17 @@ export const YoutubeVideo = component$<{
           data: DataTransferType
         } = event
 
+        if(transfer.event === 'setElapsedTime'){
+          videoElement.seekTo(transfer.data.elapsedTime, true)
+
+          // this waits for image to show up
+          setTimeout(() => {
+            videoElement.pause()
+            // @ts-expect-error
+            videoElement.dispatchEvent(new CustomEvent('pause'))
+          },500)
+        }
+
         if(transfer.event === 'mastervol'){
           if(typeof transfer.data === 'number') masterVolume = transfer.data
           videoElement.setVolume(volume * masterVolume / 100)
@@ -107,7 +152,6 @@ export const YoutubeVideo = component$<{
 
         if(transfer.event === 'play'){
 
-          console.log('play')
           if(typeof transfer.data?.masterVolume === 'number') 
             masterVolume = transfer.data.masterVolume
 

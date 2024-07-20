@@ -16,16 +16,16 @@ export const PlayOnClickStore: PlayOnClickStoreType = {
   
   on: $(function(this: PlayOnClickStoreType){
     this.playOnClick = true
-    localStorage.setItem('playOnClick', '1')
+    localStorage.setItem('autoplay', '1')
   }),
   off: $(function(this: PlayOnClickStoreType){
     this.playOnClick = false
-    localStorage.setItem('playOnClick', '0')
+    localStorage.setItem('autoplay', '0')
   }),
 
   init: $(function(this: PlayOnClickStoreType){
 
-    const a = localStorage.getItem('playOnClick')
+    const a = localStorage.getItem('autoplay')
     if(a && a === '0') this.off()
     else this.on()
 

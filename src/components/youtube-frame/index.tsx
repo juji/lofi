@@ -43,7 +43,9 @@ export const YoutubeFrame = component$(() => {
   const { 
     video,
     loop,
-    onPlayListener
+    onPlayListener,
+    setElapsedTime,
+    elapsedTime
   } = useContext(VideoContext)
   
   const { 
@@ -92,22 +94,32 @@ export const YoutubeFrame = component$(() => {
         
         if(event.origin !== window.location.origin) return;
 
-        const { data } : { data: DataTransferType } = event
+        const { data:transfer } : { data: DataTransferType } = event
 
         const frame = document.getElementById(iframe) as HTMLIFrameElement
-        if(data.event === 'ready'){
+        if(transfer.event === 'ready'){
 
-          if(playOnClick && !firstOpen.value && !data.data.wasDone) {
-            paused.value = false
-            frame.contentWindow?.postMessage( { 
-              event: 'play',
+          if(elapsedTime){
+            frame.contentWindow?.postMessage({ 
+              event: 'setElapsedTime',
               data: {
-                masterVolume: master
+                elapsedTime
               } 
             }, window.location.origin)
           }
 
-          else if(data.data.wasDone && loop){
+          if(playOnClick && !firstOpen.value && !transfer.data.wasDone) {
+            paused.value = false
+            frame.contentWindow?.postMessage({ 
+              event: 'play',
+              data: {
+                masterVolume: master,
+                elapsedTime
+              } 
+            }, window.location.origin)
+          }
+
+          else if(transfer.data.wasDone && loop){
             paused.value = false
             frame.contentWindow?.postMessage({ 
               event: 'play',
@@ -121,22 +133,27 @@ export const YoutubeFrame = component$(() => {
           firstOpen.value = false
 
         }
+
+        if(transfer.event === 'elapsedTime'){
+          setElapsedTime(transfer.data.elapsedTime)
+        }
         
-        if(data.event === 'playing'){
+        if(transfer.event === 'playing'){
           const wasPaused = paused.value
           paused.value = false
           setVideoRunning(true)
 
           if(video && !wasPaused) for(let k in onPlayListener){
-            onPlayListener[k] && onPlayListener[k](video, data.data.loop)
+            onPlayListener[k] && onPlayListener[k](video, transfer.data.loop)
           }
         }
 
-        if(data.event ===  'ended'){
+        if(transfer.event ===  'ended'){
+          setElapsedTime(0)
           setVideoRunning(false)
         }
 
-        if(data.event ===  'paused'){
+        if(transfer.event ===  'paused'){
           setVideoRunning(false)
           paused.value = true
         }

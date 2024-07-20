@@ -4,7 +4,8 @@ import type { YoutubeVideo } from './search'
 
 export type VideoStoreType = {
   video: YoutubeVideo | null
-  change: QRL<(this:VideoStoreType, video:YoutubeVideo, report?: boolean) => void>
+  elapsedTime: number
+  change: QRL<(this:VideoStoreType, video:YoutubeVideo, report?: boolean, elapsedTime?: number) => void>
 
   onPlayListener: { [key: string]: NoSerialize<(video: YoutubeVideo, isRepeat: boolean) => void> }
   onPlay: QRL<(this:VideoStoreType, key: string, fn:(video: YoutubeVideo, isRepeat: boolean) => void) => void>
@@ -13,16 +14,20 @@ export type VideoStoreType = {
 
   loop: boolean
   setLoop: QRL<(this:VideoStoreType, bool: boolean) => void>
+
+  setElapsedTime: QRL<(this:VideoStoreType, num: number) => void>
 }
 
 export const VideoContext = createContextId<VideoStoreType>('VideoContext');
 
 export const VideoStore: VideoStoreType = {
   video: null,
-  change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true){
+  elapsedTime: 0,
+  change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true, elapsedTime = 0){
     if(this.video?.id === video.id) return;
     this.video = video
-    localStorage.setItem('video', JSON.stringify(video))
+    this.elapsedTime = elapsedTime
+    localStorage.setItem('video', JSON.stringify({ video, elapsedTime }))
   }),
 
   onPlayListener: {},
@@ -34,10 +39,14 @@ export const VideoStore: VideoStoreType = {
 
     // load lofi the first time
     // or something else from ls
-    const video = lsCheckGet('video',{ check: (d) => d.id && d.channelTitle })
-    if(video) this.change(video, false)
+    const lastData = lsCheckGet('video',{ 
+      check: (d) => d.video && typeof d.elapsedTime === 'number' 
+    })
+
+    if(lastData) this.change(lastData.video, false, lastData.elapsedTime)
     else this.change({
-      "id":"jfKfPfyJRdk","type":"video",
+      "id":"jfKfPfyJRdk",
+      "type":"video",
       "thumbnail":{
         "thumbnails":[{
           "url":"https://i.ytimg.com/vi/jfKfPfyJRdk/hq720.jpg",
@@ -54,6 +63,14 @@ export const VideoStore: VideoStoreType = {
   loop: false,
   setLoop: $(function(this:VideoStoreType, bool: boolean){
     this.loop = bool
+  }),
+
+  setElapsedTime: $(function(this:VideoStoreType, elapsedTime: number){
+    this.elapsedTime = elapsedTime
+    localStorage.setItem('video', JSON.stringify({ 
+      video: this.video, 
+      elapsedTime 
+    }))
   })
 
 }
