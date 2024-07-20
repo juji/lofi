@@ -26,7 +26,7 @@ export const HistoryStore: HistoryStoreType = {
   init: $(async function(this: HistoryStoreType, videoStore: VideoStoreType){
     
     videoStore.onPlay('history', (video:YoutubeVideo, isRepeat: boolean) => {
-      console.log('onPlay', video, isRepeat)
+      // console.log('onPlay', video, isRepeat)
       if(!isRepeat) this.addHistory(video)
     })
     

@@ -51,6 +51,7 @@ export const YoutubeVideo = component$<{
       upVolumeInterval = setInterval(() => {
   
         if(volume >= 100) {
+          
           volume = 100
           videoElement.setVolume(volume * masterVolume / 100)
           upVolumeInterval && clearInterval(upVolumeInterval)
