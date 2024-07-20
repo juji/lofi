@@ -17,6 +17,12 @@ You will need to build this yourself.
 ## On mac:
 ```bash
 npm i
+npx tauri build
+```
+
+If that didn't work, try this:
+```bash
+npm i
 rustup target add universal-apple-darwin
 npx tauri build --target universal-apple-darwin
 ```
