@@ -6,8 +6,8 @@ export type VideoStoreType = {
   video: YoutubeVideo | null
   change: QRL<(this:VideoStoreType, video:YoutubeVideo, report?: boolean) => void>
 
-  onChangeListener: { [key: string]: NoSerialize<(video: YoutubeVideo) => void> }
-  onChange: QRL<(this:VideoStoreType, key: string, fn:(video: YoutubeVideo) => void) => void>
+  onPlayListener: { [key: string]: NoSerialize<(video: YoutubeVideo, isRepeat: boolean) => void> }
+  onPlay: QRL<(this:VideoStoreType, key: string, fn:(video: YoutubeVideo, isRepeat: boolean) => void) => void>
 
   init: QRL<(this:VideoStoreType) => void>
 
@@ -21,26 +21,13 @@ export const VideoStore: VideoStoreType = {
   video: null,
   change: $(function(this: VideoStoreType, video: YoutubeVideo, report = true){
     if(this.video?.id === video.id) return;
-
     this.video = video
-
     localStorage.setItem('video', JSON.stringify(video))
-    for( let key in this.onChangeListener ){
-      if(!report && key === 'history') continue;
-
-      // TS why?
-      // this.onChangeListener[key] && this.onChangeListener[key](video)
-      if(this.onChangeListener[key]){
-        const listener = this.onChangeListener[key]
-        listener && listener(video)
-      }
-
-    }
   }),
 
-  onChangeListener: {},
-  onChange: $(function(this: VideoStoreType, key: string, fn: (video: YoutubeVideo) => void){
-    this.onChangeListener[key] = noSerialize(fn)
+  onPlayListener: {},
+  onPlay: $(function(this: VideoStoreType, key: string, fn: (video: YoutubeVideo, isRepeat: boolean) => void){
+    this.onPlayListener[key] = noSerialize(fn)
   }),
 
   init: $(function(this: VideoStoreType){

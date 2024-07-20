@@ -65,7 +65,13 @@ export const YoutubeVideo = component$<{
 
       },500)
 
-      window.top?.postMessage({ event: 'playing' }, window.location.origin)
+      window.top?.postMessage({ 
+        event: 'playing',
+        data: {
+          loop: wasDone
+        } 
+      }, window.location.origin)
+
     });
     
     videoElement.addEventListener('pause', function () {
@@ -99,7 +105,8 @@ export const YoutubeVideo = component$<{
 
         if(transfer.event === 'play'){
 
-          if(typeof transfer.data.masterVolume === 'number') 
+          console.log('play')
+          if(typeof transfer.data?.masterVolume === 'number') 
             masterVolume = transfer.data.masterVolume
 
           videoElement.play()

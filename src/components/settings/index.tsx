@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik'
 import styles from './style.module.css'
-import { Autoplay } from './autoplay'
+import { PlayOnClick } from './playonclick'
 import { Timer } from './timer'
 import { Volume } from './volume'
 import { Loop } from './loop'
@@ -11,7 +11,7 @@ export const Settings = component$(() => {
     <div class={styles.top}>
       <h2>Settings</h2>
       <hr />
-      <Autoplay />
+      <PlayOnClick />
       <Loop />
       <Timer />
     </div>

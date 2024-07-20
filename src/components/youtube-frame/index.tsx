@@ -3,7 +3,7 @@ import {
   useId, useSignal, useTask$, useVisibleTask$ } from "@builder.io/qwik";
 import styles from './style.module.css'
 import { VideoContext } from "~/lib/video-store";
-import { AutoplayContext } from "~/lib/autoplay-store";
+import { PlayOnClickContext } from "~/lib/playonclick-store";
 import { TimerContext } from "~/lib/timer-store";
 import { VolumeContext } from "~/lib/volume-store";
 import { isServer } from "@builder.io/qwik/build";
@@ -42,7 +42,8 @@ export const YoutubeFrame = component$(() => {
 
   const { 
     video,
-    loop
+    loop,
+    onPlayListener
   } = useContext(VideoContext)
   
   const { 
@@ -52,8 +53,8 @@ export const YoutubeFrame = component$(() => {
   } = useContext(BookmarkContext)
 
   const { 
-    autoplay,
-  } = useContext(AutoplayContext)
+    playOnClick,
+  } = useContext(PlayOnClickContext)
 
   const { 
     onEnd: onTimerEnd, 
@@ -96,7 +97,7 @@ export const YoutubeFrame = component$(() => {
         const frame = document.getElementById(iframe) as HTMLIFrameElement
         if(data.event === 'ready'){
 
-          if(autoplay && !firstOpen.value && !data.data.wasDone) {
+          if(playOnClick && !firstOpen.value && !data.data.wasDone) {
             frame.contentWindow?.postMessage( { 
               event: 'play',
               data: {
@@ -106,11 +107,8 @@ export const YoutubeFrame = component$(() => {
           }
 
           else if(data.data.wasDone && loop){
-            frame.contentWindow?.postMessage( { 
+            frame.contentWindow?.postMessage({ 
               event: 'play',
-              data: {
-                masterVolume: master
-              } 
             }, window.location.origin)
           }
 
@@ -125,6 +123,10 @@ export const YoutubeFrame = component$(() => {
         if(data.event === 'playing'){
           paused.value = false
           setVideoRunning(true)
+
+          if(video) for(let k in onPlayListener){
+            onPlayListener[k] && onPlayListener[k](video, data.data.loop)
+          }
         }
 
         if(data.event ===  'ended'){

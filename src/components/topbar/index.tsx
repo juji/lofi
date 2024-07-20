@@ -222,11 +222,10 @@ export const TopBar = component$(() => {
   useVisibleTask$(() => {
 
     onWrite(( data: YoutubeVideoHistory ) => {
-
-      const clen = history.value.length
+      if(!isOpen.value) return
       history.value = [
         data,
-        ...clen <= 10 ? history.value.slice(0,9) : history.value
+        ...history.value
       ]
 
     })

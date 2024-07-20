@@ -5,10 +5,9 @@ import { write, remove, getPage, type YoutubeVideoHistory } from './db'
 
 export type HistoryStoreType = {
   
-  videoStore: VideoStoreType | null
   init: QRL<(this:HistoryStoreType, videoStore: VideoStoreType) => void>
 
-  add: QRL<(this:HistoryStoreType, video: YoutubeVideo) => void> 
+  addHistory: QRL<(this:HistoryStoreType, video: YoutubeVideo) => void> 
   remove: QRL<(this:HistoryStoreType, item: YoutubeVideoHistory) => Promise<YoutubeVideoHistory|null>>
   get: QRL<(this:HistoryStoreType, lastId?: string) => Promise<YoutubeVideoHistory[]>> 
 
@@ -24,18 +23,17 @@ export const HistoryContext = createContextId<HistoryStoreType>('HistoryContext'
 
 export const HistoryStore: HistoryStoreType = {
 
-  videoStore: null,
   init: $(async function(this: HistoryStoreType, videoStore: VideoStoreType){
     
-    videoStore.onChange('history', (video:YoutubeVideo) => {
-      this.add(video)
+    videoStore.onPlay('history', (video:YoutubeVideo, isRepeat: boolean) => {
+      console.log('onPlay', video, isRepeat)
+      if(!isRepeat) this.addHistory(video)
     })
-    
-    this.videoStore = videoStore
     
   }),
   
-  add: $(async function(this: HistoryStoreType, video: YoutubeVideo){
+  addHistory: $(async function(this: HistoryStoreType, video: YoutubeVideo){
+    console.log('adding', video)
     const data = await write(video)
     this.onWriteListener && this.onWriteListener(data)
   }),

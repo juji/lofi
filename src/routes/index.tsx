@@ -7,7 +7,7 @@ import { LeftSide } from "~/components/left-side";
 import { Search } from "~/components/search";
 
 import { VideoContext, type VideoStoreType, VideoStore } from "~/lib/video-store";
-import { AutoplayContext, type AutoplayStoreType, AutoPlayStore } from "~/lib/autoplay-store";
+import { PlayOnClickContext, type PlayOnClickStoreType, PlayOnClickStore } from "~/lib/playonclick-store";
 import { TimerContext, type TimerStoreType, TimerStore } from "~/lib/timer-store";
 import { VolumeContext, type VolumeStoreType, VolumeStore } from "~/lib/volume-store";
 import { BookmarkContext, type BookmarkStoreType, BookmarkStore } from "~/lib/bookmark-store";
@@ -32,8 +32,8 @@ export default component$(() => {
   useContextProvider(VideoContext, videoStore)
 
   //
-  const autoplayStore = useStore<AutoplayStoreType>(AutoPlayStore)
-  useContextProvider(AutoplayContext, autoplayStore)
+  const playOnClickStore = useStore<PlayOnClickStoreType>(PlayOnClickStore)
+  useContextProvider(PlayOnClickContext, playOnClickStore)
 
   //
   const timerStore = useStore<TimerStoreType>(TimerStore)
@@ -57,7 +57,7 @@ export default component$(() => {
     keyboardListeners()
     historyStore.init( videoStore )
     videoStore.init()
-    autoplayStore.init()
+    playOnClickStore.init()
     bookmarkStore.init()
 
     initAction()
