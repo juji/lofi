@@ -1,5 +1,6 @@
-import { component$, type QRL } from "@builder.io/qwik";
+import { component$, useContext, type QRL } from "@builder.io/qwik";
 import styles from './style.module.css'
+import { PlayOnClickContext } from "~/lib/playonclick-store";
 
 type TopbarMenuProps = {
   isOpen: boolean,
@@ -17,6 +18,10 @@ export const TopbarMenu = component$<TopbarMenuProps>(({
   // onPrev,
   // onNext
 }) => {
+
+  const { 
+    playOnClick,
+  } = useContext(PlayOnClickContext)
   
   return <div class={styles.container}>
     <div>
@@ -26,6 +31,9 @@ export const TopbarMenu = component$<TopbarMenuProps>(({
         {isOpen ? 'Close History' : 'History'}
       </button>
     </div>
+    {isOpen && playOnClick ? <div class={styles.playOnClick}>
+      <span>Play On Click is on</span>
+    </div> : ''}
     {/* <div>
       <button 
         class={`${styles.prev}`} 
