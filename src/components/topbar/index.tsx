@@ -180,21 +180,32 @@ export const TopBar = component$(() => {
 
     if(isServer) return;
 
-    const selected = document.querySelectorAll(
-      '#historySelectorList input[value]:checked'
-    )
+    if(topBarChecked.value){
+      const selected = document.querySelectorAll(
+        '#historySelectorList input[value]:checked'
+      ).length
+  
+      if(!selected){
+        document.querySelectorAll(
+          '#historySelectorList input[value]'
+        ).forEach(v => {
+          (v as HTMLInputElement).checked = topBarChecked.value
+        })
+      }
+  
+      selectedLength.value = document.querySelectorAll(
+        '#historySelectorList input[value]:checked'
+      ).length
+    }else{
 
-    if(!selected.length){
       document.querySelectorAll(
-        '#historySelectorList input[value]'
+        '#historySelectorList input[value]:checked'
       ).forEach(v => {
         (v as HTMLInputElement).checked = topBarChecked.value
       })
+  
+      selectedLength.value = 0
     }
-
-    selectedLength.value = document.querySelectorAll(
-      '#historySelectorList input[value]:checked'
-    ).length
 
   })
 
