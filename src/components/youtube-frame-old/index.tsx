@@ -1,7 +1,7 @@
 import { component$, useContext, useTask$ } from "@builder.io/qwik";
 import { VideoContext } from "~/lib/video-store";
 import styles from './style.module.css'
-import { AutoplayContext } from "~/lib/autoplay-store";
+import { PlayOnClickContext } from "~/lib/playonclick-store";
 
 type YtProps = {
   id: string
@@ -12,8 +12,8 @@ type YtProps = {
 const FrameComponent = component$<YtProps>(({ id, params }) => {
   
   const { 
-    autoplay, 
-  } = useContext(AutoplayContext)
+    playOnClick, 
+  } = useContext(PlayOnClickContext)
 
   
   useTask$(({ track, cleanup }) => {
@@ -56,7 +56,7 @@ const FrameComponent = component$<YtProps>(({ id, params }) => {
   
       function onPlayerReady(){
         player.setVolume(100)
-        if(autoplay) player.playVideo()
+        if(playOnClick) player.playVideo()
       }
 
       clearInterval(inter)
