@@ -143,8 +143,9 @@ export const YoutubeFrame = component$(() => {
           paused.value = false
           setVideoRunning(true)
 
-          if(video && !wasPaused) for(let k in onPlayListener){
-            onPlayListener[k] && onPlayListener[k](video, transfer.data.loop)
+          if(video && !wasPaused) for(const k in onPlayListener){
+            const listener = onPlayListener[k]
+            listener && listener(video, transfer.data.loop)
           }
         }
 
