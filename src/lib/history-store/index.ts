@@ -57,7 +57,6 @@ export const HistoryStore: HistoryStoreType = {
   index: 0,
   moveIndex: $(function(this:HistoryStoreType, num: number){
     this.index += num
-    
   })
 
 }

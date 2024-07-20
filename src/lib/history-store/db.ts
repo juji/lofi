@@ -96,7 +96,7 @@ export async function write(video: YoutubeVideo): Promise<YoutubeVideoHistory>{
 
 export async function remove(key: string): Promise<YoutubeVideoHistory|null>{
   const db = await store()
-  const transaction = db.transaction(storeName, "readonly");
+  const transaction = db.transaction(storeName, "readwrite");
   const objectStore = transaction.objectStore(storeName);
   const request = objectStore.openCursor( null, 'prev');
 
@@ -114,6 +114,7 @@ export async function remove(key: string): Promise<YoutubeVideoHistory|null>{
       
       if(cursor.key === key){
         data = cursor.value
+        cursor.delete()
         db.close()
         return r(data)
       }else{
