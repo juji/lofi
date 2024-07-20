@@ -22,7 +22,7 @@ export const Timer = component$(() => {
       <span>auto pause</span>
     </h3>
 
-    <p>Turn Off Sound in</p>
+    <p>Turn Off Sound In:</p>
 
     <div class={`${styles.hourinput} ${previouslyValued.value ? styles.previouslyValued : ''}`}>
       <TimerInput 
